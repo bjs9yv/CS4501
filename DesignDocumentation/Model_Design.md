@@ -19,5 +19,15 @@
 - Merchant (User)
 - Quantity Available (integer)
 
-### Escrow 
+### Transaction
+- Product
+- Quantity
+- Buyer
+- Seller
+- Status
 
+### Escrow
+- 
+
+### Shopping Cart
+- Products (List of Listings)
