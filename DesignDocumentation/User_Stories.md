@@ -7,7 +7,8 @@
 - As a User, when I make my account I want to optionally add Bitcoin addresses to use for withdraws.
 - As a User, I want to credit my account with Bitcoins I send from a Bitcoin address.
 - As a User, I want to direct message other Users.
-- As a Seller, I want to know if the buyer is trustworthy
+- As a Seller, I want to know if the buyer is trustworthy.
+- As a Buyer, I want to add products to a shopping cart.
 
 #### Listings
 - As a Seller, I want to post a new Listing.
