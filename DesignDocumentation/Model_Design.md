@@ -1,3 +1,5 @@
+# Models
+
 ### User 
 - Username (10 character alpha-numeric string)
 - Public key (string)
