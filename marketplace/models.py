@@ -1,8 +1,55 @@
 from django.db import models
+impor datetime
 
 class merchant(models.Model):
     username = models.CharField(max_length=11)
     publickey = models.TextField()
     bitcoin_credit = models.FloatField()
+    
+    
+class Transaction(models.Model):
+    product = models.CharField(max_length=30)
+    quantity = models.IntegerFeild()
+    buyer = models.CharField(max_length=11)
+    seller = models.CharField(max_length=11)
+    # Assume two users in a transaction
+    # 0. No transaction
+    # 1. Seller shipped, merchant has not received (incomplete)
+    # 2. Seller shipped, merchant has received (complete)
+    # 3. Transaction cancelled
+    # 4. Transaction failed
+    
+    shipped_date = models.DateTimeField(default=datetime.now, blank=True)
+    received_date = models.DateTimeField(default=datetime.now, blank=True)
+    cancelled_date = models.DateTimeField(default=datetime.now, blank=True)
+    failed_date = models.DateTimeField(default=datetime.now, blank=True)
+    
+    TRANSACTION_UNINITIATED = 0
+    TRANSACTION_INCOMPLETE = 1
+    TRANSACTION_COMPLETE = 2
+    TRANSACTION_CANCELLED = 3
+    TRANSACTION_FAILED = 4
+
+    TRANSACTION_STATUSES = [(TRANSACTION_UNINITIATED, 'Transaction uninitiated'),
+	      (TRANSACTION_INCOMPLETE, 'Transaction incomplete'),
+	      (TRANSACTION_COMPLETE, 'Transaction complete'),
+	      (TRANSACTION_CANCELLED, 'Transaction cancelled')
+	      (TRANSACTION_CANCELLED, 'Transaction failed')]
+    
+    status = models.IntegerField(choices=TRANSACTION_STATUSES, default=0)
+
+    def update_status(self, status):
+	self.status = status
+	if(status == 1):
+	    self.shipped_date = models.DateTimeField(added_now=True)
+	if(status == 2):
+	    self.received_date = models.DateTimeField(added_now=True)
+	if(status == 3):
+	    self.cancelled_date = models.DateTimeField(added_now=True)
+	if(status == 4):
+	    self.failed_date = models.DateTimeField(added_now=True)
+    
+    def get_status(self):
+	return str(self.status)
     
     
