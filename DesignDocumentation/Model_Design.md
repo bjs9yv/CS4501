@@ -4,7 +4,6 @@
 - Username (10 character alpha-numeric string)
 - Public key (string)
 - Bitcoin credit (float)
-- Bitcoin address (string)
 - One or more Bitcoin accounts (string)
 - Rating (integer)
 - Purchases (List of Listings)
