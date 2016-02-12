@@ -7,9 +7,14 @@
 - One or more Bitcoin accounts (string)
 - Rating (integer)
 - Purchases (List of Listings)
-- Direct Messages(List of strings)
 - Seller (boolean)
 - Products (List of Listings)
+
+### Message
+- sender
+- recipient
+- body
+- opened
 
 ### Listing 
 - Title (string)
