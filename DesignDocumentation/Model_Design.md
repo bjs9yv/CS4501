@@ -14,7 +14,7 @@
 ### Listing 
 - Title (string)
 - Description (string)
-- Bitcoin cost (string)
+- Bitcoin cost (float)
 - Merchant (User)
 - Quantity Available (integer)
 
