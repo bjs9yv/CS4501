@@ -1,5 +1,5 @@
 from django.db import models
-impor datetime
+import datetime
 
 class Merchant(models.Model):
     username = models.CharField(max_length=11)
