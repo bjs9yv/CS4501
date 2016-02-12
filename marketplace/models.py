@@ -15,6 +15,9 @@ class Message(models.Model):
     recipient = models.ForeignKey(Merchant, related_name='message_recipient')
     body = models.TextField()
     opened = models.BooleanField(default=False)
-
     
-    
+class Listing (models.Model):
+    title = models.TextField()
+    description = models.TextField()
+    bitcoin_cost = models.FloatField()
+    quantity_available = models.FloatField()
