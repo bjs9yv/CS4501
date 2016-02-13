@@ -54,13 +54,13 @@ class Transaction(models.Model):
         self.status = status
         if status == 1:
             self.shipped_date = models.DateTimeField(added_now=True)
-	if status == 2:
+        if status == 2:
             self.received_date = models.DateTimeField(added_now=True)
-	if status == 3:
+        if status == 3:
             self.cancelled_date = models.DateTimeField(added_now=True)
-	if status == 4:
+        if status == 4:
             self.failed_date = models.DateTimeField(added_now=True)
     
     def get_status(self):
-	return str(self.status)
+        return str(self.status)
       
