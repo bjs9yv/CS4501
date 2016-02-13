@@ -1,6 +1,12 @@
 from django.db import models
 import datetime
 
+class Listing (models.Model):
+    title = models.TextField()
+    description = models.TextField()
+    bitcoin_cost = models.FloatField()
+    quantity_available = models.FloatField()
+
 class Merchant(models.Model):
     username = models.CharField(max_length=11)
     publickey = models.TextField()
@@ -46,7 +52,7 @@ class Transaction(models.Model):
 
     def update_status(self, status):
         self.status = status
-	if(status == 1):
+        if(status == 1):
             self.shipped_date = models.DateTimeField(added_now=True)
 	if(status == 2):
             self.received_date = models.DateTimeField(added_now=True)
