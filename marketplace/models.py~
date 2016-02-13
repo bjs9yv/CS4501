@@ -25,7 +25,7 @@ class Message(models.Model):
     
 class Transaction(models.Model):
     product = models.CharField(max_length=30)
-    quantity = models.IntegerFeild()
+    quantity = models.IntegerField()
     buyer = models.CharField(max_length=11)
     seller = models.CharField(max_length=11)
     # Assume two users in a transaction
@@ -35,10 +35,10 @@ class Transaction(models.Model):
     # 3. Transaction cancelled
     # 4. Transaction failed
     
-    shipped_date = models.DateTimeField(default=datetime.now, blank=True)
-    received_date = models.DateTimeField(default=datetime.now, blank=True)
-    cancelled_date = models.DateTimeField(default=datetime.now, blank=True)
-    failed_date = models.DateTimeField(default=datetime.now, blank=True)
+    shipped_date = models.DateTimeField(default=datetime.now(), blank=True)
+    received_date = models.DateTimeField(default=datetime.now(), blank=True)
+    cancelled_date = models.DateTimeField(default=datetime.now(), blank=True)
+    failed_date = models.DateTimeField(default=datetime.now(), blank=True)
     
     TRANSACTION_UNINITIATED = 0
     TRANSACTION_INCOMPLETE = 1
