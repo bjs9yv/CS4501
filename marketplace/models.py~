@@ -41,15 +41,15 @@ class Transaction(models.Model):
     TRANSACTION_FAILED = 4
 
     TRANSACTION_STATUSES = [(TRANSACTION_UNINITIATED, 'Transaction uninitiated'),
-                            (TRANSACTION_INCOMPLETE, 'Transaction incomplete'), 
-                            (TRANSACTION_COMPLETE, 'Transaction complete'),
-                            (TRANSACTION_CANCELLED, 'Transaction cancelled'),
-                            (TRANSACTION_CANCELLED, 'Transaction failed')]
+	      (TRANSACTION_INCOMPLETE, 'Transaction incomplete'),
+	      (TRANSACTION_COMPLETE, 'Transaction complete'),
+	      (TRANSACTION_CANCELLED, 'Transaction cancelled')
+	      (TRANSACTION_CANCELLED, 'Transaction failed')]
     
     status = models.IntegerField(choices=TRANSACTION_STATUSES, default=0)
 
     def update_status(self, status):
-        self.status = status
+	self.status = status
 	if(status == 1):
 	    self.shipped_date = models.DateTimeField(added_now=True)
 	if(status == 2):
