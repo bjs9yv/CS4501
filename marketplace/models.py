@@ -1,6 +1,6 @@
 from django.db import models
+from django.utils import timezone
 import datetime
-
 class Listing (models.Model):
     title = models.TextField()
     description = models.TextField()
@@ -15,7 +15,6 @@ class Merchant(models.Model):
     rating = models.IntegerField(default=0)
     is_seller = models.BooleanField(default=False)
     purchases = models.ForeignKey(Listing)
-    products = models.ForeignKey(Listing)
     
 class Message(models.Model):
     sender = models.ForeignKey(Merchant, related_name='message_sender')
@@ -35,10 +34,10 @@ class Transaction(models.Model):
     # 3. Transaction cancelled
     # 4. Transaction failed
     
-    shipped_date = models.DateTimeField(default=datetime.datetime.now(), blank=True)
-    received_date = models.DateTimeField(default=datetime.datetime.now(), blank=True)
-    cancelled_date = models.DateTimeField(default=datetime.datetime.now(), blank=True)
-    failed_date = models.DateTimeField(default=datetime.datetime.now(), blank=True)
+    shipped_date = models.DateTimeField(default=datetime.datetime.now, blank=True)
+    received_date = models.DateTimeField(default=datetime.datetime.now, blank=True)
+    cancelled_date = models.DateTimeField(default=datetime.datetime.now, blank=True)
+    failed_date = models.DateTimeField(default=datetime.datetime.now, blank=True)
     
     TRANSACTION_UNINITIATED = 0
     TRANSACTION_INCOMPLETE = 1
