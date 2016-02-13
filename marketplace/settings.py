@@ -76,7 +76,7 @@ WSGI_APPLICATION = 'marketplace.wsgi.application'
 
 DATABASES = {
           'default': {
-          'ENGINE': 'mysql.connector.django',
+          'ENGINE': 'django.db.backends.sqlite3',
           'NAME': 'cs4501',
           'USER': 'www',
           'PASSWORD': 'S3cure',
