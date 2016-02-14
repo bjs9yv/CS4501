@@ -3,7 +3,9 @@
 ### Models Related
 
 #### Users 
-- As a User, I want to be able to search for products
+- As a User, I want to be able to search for products.
+- As a User, I want the site to keep my identity anonymous to other users.
+- As a Buyer, I want to see the price in bitcoin and USD. 
 - As a User, when I make my account I want to upload my public key to my profile.
 - As a User, when I make my account I want to optionally add Bitcoin addresses to use for withdraws.
 - As a User, I want to credit my account with Bitcoins I send from a Bitcoin address.
