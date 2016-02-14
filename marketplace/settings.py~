@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'marketplace'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -75,11 +76,14 @@ WSGI_APPLICATION = 'marketplace.wsgi.application'
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+          'default': {
+          'ENGINE': 'mysql.connector.django',
+	  'NAME': 'cs4501',
+          'USER': 'www',
+          'PASSWORD': 'S3cure',
+          'HOST': 'db',
+          }
+      }
 
 
 # Internationalization
@@ -100,3 +104,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
