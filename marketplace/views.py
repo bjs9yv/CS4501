@@ -7,3 +7,15 @@ class ListingViewSet(viewsets.ModelViewSet):
     """
     queryset = Listing.objects.all()
     serializer_class = ListingSerializer
+
+class TransactionViewSet(viewsets.ModelViewSet):
+    queryset = Transaction.objects.all()
+    serializer_class = TransactionSerializer
+
+class MessageViewSet(viewsets.ModelViewSet):
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
+
+class MerchantViewSet(viewsets.ModelViewSet):
+    queryset = Merchant.objects.all()
+    serializer_class = MerchantSerializer
