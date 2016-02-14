@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from .serializers import ListingSerializer, TransactionSerializer, MessageSerializer, MerchantSerializer
+from .models import Listing, Merchant, Message, Transaction
 
 class ListingViewSet(viewsets.ModelViewSet):
     """
