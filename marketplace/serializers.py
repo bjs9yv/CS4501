@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Listing, Merchant, Message
+from .models import Listing, Merchant, Message, Transaction
 
 class ListingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
