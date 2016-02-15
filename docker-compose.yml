@@ -1,0 +1,16 @@
+mysql:
+   image: mysql:5.7.10
+   environment:
+    MYSQL_DATABASE: cs4501
+    MYSQL_USER: www
+    DATABASE_PASSWORD: S3cure
+    MYSQL_ROOT_PASSWORD: XXX
+isaweb:
+   image: tp33/django:1.2
+   links:
+     - mysql:db
+   volumes:
+     - .:/app
+   command: mod_wsgi-express start-server --working-directory /app --url-alias /static /app/marketplace/static /app/marketplace/wsgi.py &
+   ports:
+    - "8000:8000"
