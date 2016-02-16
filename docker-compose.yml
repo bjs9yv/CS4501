@@ -6,4 +6,5 @@ isaweb:
      - .:/app
    command: mod_wsgi-express start-server --working-directory /app --url-alias /static /app/marketplace/static /app/marketplace/wsgi.py &
    ports:
-    - "8000:8000"
+     - "8000:8000"
+     - "8080:8080"
