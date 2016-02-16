@@ -38,7 +38,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'marketplace',
-    'rest_framework'
+    'rest_framework',
+    'mod_wsgi.server'
 )
 
 REST_FRAMEWORK = {
