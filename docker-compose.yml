@@ -1,10 +1,27 @@
-isaweb:
+models:
    build: .
    external_links:
      - mysql:db
    volumes:
-     - .:/app
-   command: mod_wsgi-express start-server --working-directory /app --url-alias /static /app/marketplace/static /app/marketplace/wsgi.py &
+     - ./models/:/app
+   command: mod_wsgi-express start-server --reload-on-changes /app/marketplace/wsgi.py &
+   ports:
+     - "8001:8000"
+exp:
+   build: .
+   links:
+     - models:models-api
+   volumes:
+     - ./exp/:/app
+   command: mod_wsgi-express start-server --reload-on-changes /app/experience_API/wsgi.py &
+   ports:
+     - "8002:8000"
+web:
+   build: .
+   links:
+     - exp:exp-api
+   volumes:
+     - ./web/:/app
+   command: mod_wsgi-express start-server --reload-on-changes /app/web_interface/wsgi.py &
    ports:
      - "8000:8000"
-     - "8080:8080"
