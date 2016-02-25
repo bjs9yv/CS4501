@@ -9,7 +9,7 @@ class ListingSerializer(serializers.HyperlinkedModelSerializer):
 class TransactionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Transaction
-        fields = ('product','quantity', 'buyer', 'seller', 'today', 'shipped_date','received_date', 'cancelled date', 'failed_date', 'status')
+        fields = ('product','quantity', 'buyer', 'seller', 'today', 'shipped_date','received_date', 'cancelled_date', 'failed_date', 'status')
         
 class MessageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
