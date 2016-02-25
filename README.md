@@ -6,6 +6,12 @@
   - Layer 3: Service level API
   - Layer 4: Web Interface
 
+# Requirements
+
+- Django 1.8.8
+- Python 3.4.3
+- Djangorestframework
+
 # Models
 
 ### User 
