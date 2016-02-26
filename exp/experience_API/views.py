@@ -4,10 +4,11 @@ import json
 from django.http import HttpResponse
 
 def listing_service(request):
+    pass
     # call the API to return most recent listings
 
 def recent_listings(request):
-    req = urllib.request.Request('http://172.17.0.3/listing')
+    req = urllib.request.Request('http://172.17.0.3:8000/listing')
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     resp = json.loads(resp_json)
     return HttpResponse(resp)
