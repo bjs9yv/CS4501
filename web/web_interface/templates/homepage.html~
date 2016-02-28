@@ -1,0 +1,7 @@
+Welcome!
+<br>
+Recent Listings:
+<br>
+{% for item in listing %}
+   {{ item.title }}
+{% endfor %}
