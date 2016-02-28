@@ -20,5 +20,13 @@ from . import views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^home/', views.index, name='index'),
+    url(r'^$', views.home, name='home'),
+
+    # ex: /polls/5/
+    url(r'^(?P<listing_id>[0-9]+)/$', views.detail, name='detail'),
+        # ex: /polls/5/results/
+    url(r'^(?P<listing_id>[0-9]+)/results/$', views.results, name='results'),
+
+
+    
 ]
