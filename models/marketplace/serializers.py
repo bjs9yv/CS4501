@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import Listing, Merchant, Message, Transaction
 
 class ListingSerializer(serializers.HyperlinkedModelSerializer):
-    id = serializers.Field()
+    id = serializers.ReadOnlyField()
     class Meta:
         model = Listing
         fields = ('id','title','description','bitcoin_cost','quantity_available')
