@@ -17,3 +17,14 @@ def home(request):
     
     
     return render(request, 'homepage.html', resp)
+
+def listing (request):
+
+     return render(request, 'listing.html')
+
+ 
+
+ 
+
+
+    

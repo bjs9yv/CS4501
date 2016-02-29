@@ -1,0 +1,10 @@
+HI
+
+<br>
+Current Listing Detail:
+<br>
+{% for item in results %}
+<a href="{% url 'listing' %}">{{ item.title }}</a>
+<a href="{% url 'listing' %}">{{ item.description }}</a>
+
+{% endfor %}

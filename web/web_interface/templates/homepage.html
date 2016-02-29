@@ -3,5 +3,5 @@ Welcome!
 Recent Listings:
 <br>
 {% for item in results %}
-   <a href="{% url 'home' %}">{{ item.title }}</a>
+   <a href="{% url 'listing' %}">{{ item.title }}</a>
 {% endfor %}
