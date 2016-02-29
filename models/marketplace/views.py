@@ -9,6 +9,10 @@ class ListingViewSet(viewsets.ModelViewSet):
     queryset = Listing.objects.all()
     serializer_class = ListingSerializer
 
+    # doesnt do anythong/ dont know how to make it work
+    def get(self, request, format=None):
+        return Listing.objects.filter(id=request.GET['listing_id'])
+         
 class TransactionViewSet(viewsets.ModelViewSet):
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer

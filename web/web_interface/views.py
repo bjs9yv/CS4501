@@ -5,9 +5,6 @@ import urllib.request
 import urllib.parse
 import json
 
-# make a GET request and parse the returned JSON
-# note, no timeouts, error handling or all the other things needed to do this for real
-
 def home(request):
     req = urllib.request.Request('http://exp-api:8000/recent_listings')
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
@@ -17,7 +14,9 @@ def home(request):
 
 
 def listing(request, listing_id):
-    req = urllib.request.Request('http://exp-api:8000/recent_listings')
+    url = 'http://exp-api:8000/listing_service/?listing_id='
+    url += str(listing_id)
+    req = urllib.request.Request(url)
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     resp = json.loads(resp_json)
     return render(request, 'listing.html', resp)

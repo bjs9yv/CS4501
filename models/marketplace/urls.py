@@ -5,6 +5,7 @@ from marketplace import views
 
 router = routers.DefaultRouter()
 router.register(r'listing', views.ListingViewSet)
+#router.register(r'listingid/(?P<listing_id>[0-9]+)/$', views.ListingViewSet)
 router.register(r'merchant', views.MerchantViewSet)
 router.register(r'message', views.MessageViewSet)
 router.register(r'transaction', views.TransactionViewSet)
