@@ -19,9 +19,8 @@ from django.contrib import admin
 from . import views 
 
 urlpatterns = [
+    url(r'^listing/(?P<listing_id>\d+)/$', views.listing, name='listing'),
     url(r'^admin/', include(admin.site.urls)),
-
-    url (r'^listing/', views.listing, name='listing'),
     url(r'^', views.home, name='home')
 
 ]

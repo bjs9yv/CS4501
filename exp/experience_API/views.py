@@ -8,6 +8,6 @@ def listing_service(request):
     # return a specific listing when a listing was clicked on
 
 def recent_listings(request):
-    req = urllib.request.Request('http://172.17.0.3:8000/listing')
+    req = urllib.request.Request('http://models-api:8000/listing')
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     return HttpResponse(resp_json)
