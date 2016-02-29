@@ -1,0 +1,3 @@
+def listing_service(request):
+    # call the API to return most recent listings
+    

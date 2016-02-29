@@ -1,21 +1,9 @@
-"""experience_API URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/1.8/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  url(r'^$', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  url(r'^$', Home.as_view(), name='home')
-Including another URLconf
-    1. Add an import:  from blog import urls as blog_urls
-    2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
-"""
 from django.conf.urls import include, url
 from django.contrib import admin
+from experience_API import views
 
 urlpatterns = [
+    url(r'^listing_service/', views.listing_service, name='listing_service'),
+    url(r'^recent_listings/', views.recent_listings, name='recent_listings'),
     url(r'^admin/', include(admin.site.urls)),
 ]
