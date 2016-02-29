@@ -15,5 +15,11 @@ def home(request):
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     resp = json.loads(resp_json)    
     
-    
     return render(request, 'homepage.html', resp)
+
+def listing(request, listing_id):
+    req = urllib.request.Request('http://172.17.0.4:8000/recent_listings')
+    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+    resp = json.loads(resp_json)    
+
+    return render(request, 'listing.html', resp)
