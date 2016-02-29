@@ -16,7 +16,7 @@ def home(request):
     return render(request, 'homepage.html', resp)
 
 
-def listing(request, listing_id):
+def listing(request):
     req = urllib.request.Request('http://exp-api:8000/recent_listings')
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     resp = json.loads(resp_json)
