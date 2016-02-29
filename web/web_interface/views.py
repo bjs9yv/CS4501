@@ -6,7 +6,7 @@ import json
 
 
 def home(request):
-    req = urllib.request.Request('http://172.17.0.4:8000/recent_listings')
+    req = urllib.request.Request('http://exp-api:8000/recent_listings')
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     resp = json.loads(resp_json)
     return render(request, 'homepage.html', resp)
