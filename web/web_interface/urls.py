@@ -5,5 +5,6 @@ from . import views
 urlpatterns = [
     url(r'^listing/id/(?P<listing_id>\d+)/$', views.listing, name='listing'),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^login/', views.login, name='login'),
     url(r'^', views.home, name='home')
 ]
