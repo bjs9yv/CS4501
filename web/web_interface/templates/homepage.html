@@ -1,5 +1,9 @@
 Welcome!
 <br>
+<a href="{% url 'login' %}">Login</a>
+<br>
+<a href="{% url 'create_account' %}">Create Account</a>
+<br>
 Recent Listings:
 <br>
 {% for item in results %}

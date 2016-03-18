@@ -8,6 +8,9 @@ import json
 def login(request):
     pass
 
+def create_account(request):
+    pass
+
 def home(request):
     req = urllib.request.Request('http://exp-api:8000/recent_listings')
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
