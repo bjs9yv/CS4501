@@ -6,8 +6,10 @@ class RegistrationForm(forms.Form):
     password2 = forms.CharField(label='Confirm Password',label_suffix='', widget=forms.PasswordInput())
     
     def clean(self):
+        if self.cleaned_data.get('password1') != None and len(self.cleaned_data.get('password1')) < 8:
+            self.add_error('password1','Password must be 8 or more characters')
         if self.cleaned_data.get('password1') != self.cleaned_data.get('password2'):
             self.add_error('password2','Passwords much match')
-        # TODO: password too short
+        
         # TODO: username already taken, do this with api call to exp layer -> model layer
         return self.cleaned_data
