@@ -1,6 +1,11 @@
 from rest_framework import viewsets
 from .serializers import ListingSerializer, TransactionSerializer, MessageSerializer, MerchantSerializer
 from .models import Listing, Merchant, Message, Transaction
+import os
+import hmac
+from .settings import SECRET_KEY
+import json
+from django.http import HttpResponse
 
 class ListingViewSet(viewsets.ModelViewSet):
     """
@@ -24,3 +29,41 @@ class MessageViewSet(viewsets.ModelViewSet):
 class MerchantViewSet(viewsets.ModelViewSet):
     queryset = Merchant.objects.all()
     serializer_class = MerchantSerializer
+
+
+def create_user(request):
+
+    #TODO add code to check if username is taken
+    #TODO add code to check for valid password: <7
+    
+    if request.method != 'GET':
+        return HttpResponse(json.dumps({'create': False, 'Response': 'Bad request. Use GET'}))
+
+    if 'username' in request.GET and 'password' in request.GET:
+
+        new_user = Merchant.objects.create()
+                
+        new_user.username = request.GET['username']
+        new_user.password = request.GET['password']
+
+        new_user.save()
+        return HttpResponse(json.dumps({'create': True, 'response': 'New User created'}))
+
+    return HttpResponse(json.dumps({'create': False, 'response': 'Missing Username and/or password'}))
+
+def verify_user(response):
+    #check if user exists
+    #return authenticator - use Pink's code. 
+
+    user = Merchants.objects.filter(username=request.GET['username'], password = request.GET['password'])
+    authenticator = None
+        
+    if user.exists():
+        
+        authenticator = hmac.new (key = settings.SECRET_KEY.encode('utf-8'), msg = os.urandom(32), digestmod = 'sha256').hexdigest()
+
+    return HttpResponse(json.dumps({'authenticator': authenticator}))
+
+    
+            
+
