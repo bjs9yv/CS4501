@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
+from django.contrib.auth.hashers import make_password, check_password
 from urllib.request import urlopen
 import urllib.request
 import urllib.parse
@@ -22,9 +23,15 @@ def create_account(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
-            return HttpResponse(username + ' ' + password)
+            password = make_password(password)
             # make API call to exp layer
-            # HTTPReddirect to home if successful
+            url = 'http://exp-api:8000/create_user/'
+            url += '?username=%s&password=%s' % (username, password)
+            req = urllib.request.Request(url)
+            resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+            resp = json.loads(resp_json) 
+            # HTTPReddirect to login if successful
+            return HttpResponse(resp)
     else:
         form = RegistrationForm()
     context = {'form': form}

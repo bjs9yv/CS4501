@@ -20,22 +20,24 @@ def recent_listings(request):
 
 def login(request):
     if 'username' in request.GET and 'password' in request.GET:
-	username = request.GET['username']
-	password = request.GET['password']
-        req = urllib.request.Request('http://models-api:8000/verify/?username=%s&password=%s'%(username, password))
+        username = request.GET['username']
+        password = request.GET['password']
+        url = 'http://models-api:8000/verify/?username=%s&password=%s' % (username, password)
+        req = urllib.request.Request(url)
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-#        return HttpResponse()
+        # return HttpResponse()
     else:
         return HttpResponse("Something broke")
-    pass
     # Get username and password
     
 def create_user(request):
-    if 'username' in request.GET:
-	return HttpResponse("Username has already been taken! Please choose a different one.")
-    elif request.method != 'POST':
-        return JsonResponse({'create':False, 'error': 'Bad request. Use POST'})
+    if 'username' in request.GET and 'password' in request.GET:
+        username = request.GET['username']
+        password = request.GET['password']
+        # API call to models
+        url = 'http://models-api:8000/create_user/?username=%s&password=%s' % (username, password)
+        req = urllib.request.Request(url)
+        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+        return HttpResponse(resp)
     else:
-      	username = request.GET['username']
-	password = request.GET['password']
-	return JsonResponse({'username': username; 'password': password})
+        return HttpResponse('something broke')
