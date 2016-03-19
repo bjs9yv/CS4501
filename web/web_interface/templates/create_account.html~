@@ -1,0 +1,21 @@
+<body>
+  <div id="login">
+    <h2>Create an Account</h2>
+    <form method="post" autocomplete="off" action="{% url 'create_account' %}">
+      
+      <fieldset>
+	<p><label for="username">Username</label></p>
+	<p><input type="hidden" id="username" value="billyjoe" onBlur="if(this.value=='')this.value='billyjoe'" onFocus="if(this.value=='billyjoe')this.value=''">{{ form.username }}</input></p>
+
+	<p><label for="password">Password</label></p>
+	<p><input type="hidden" id="password" value="password" onBlur="if(this.value=='')this.value='password'" onFocus="if(this.value=='password')this.value=''">{{ form.password1 }}</input></p>
+	
+	<p><label for="password">Confirm Password</label></p>
+	<p><input type="hidden" id="password" value="password" onBlur="if(this.value=='')this.value='password'" onFocus="if(this.value=='password')this.value=''">{{ form.password2 }}</input></p>
+
+	<input type="submit" value="Register!" />
+      </fieldset>
+      {% csrf_token %}
+    </form>
+  </div>
+</body>
