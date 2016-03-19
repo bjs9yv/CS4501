@@ -10,12 +10,14 @@ class Listing (models.Model):
 
 class Merchant(models.Model):
     username = models.CharField(max_length=11)
-    publickey = models.TextField()
-    bitcoin_credit = models.FloatField()
-    accounts = models.TextField()
+    password = models.CharField(default='legacy migrations', max_length=512)
+    
+    publickey = models.TextField(blank=True)
+    bitcoin_credit = models.FloatField(default=0)
+    accounts = models.TextField(blank=True)
     rating = models.IntegerField(default=0)
     is_seller = models.BooleanField(default=False)
-    purchases = models.ForeignKey(Listing)
+    purchases = models.ForeignKey(Listing, blank=True, null=True)
     
 class Message(models.Model):
     sender = models.ForeignKey(Merchant, related_name='message_sender')
