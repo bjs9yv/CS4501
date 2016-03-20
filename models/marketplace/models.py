@@ -2,6 +2,8 @@ from django.db import models
 from django.utils import timezone
 import datetime
 
+
+
 class Listing (models.Model):
     title = models.TextField()
     description = models.TextField()
@@ -18,6 +20,12 @@ class Merchant(models.Model):
     rating = models.IntegerField(default=0)
     is_seller = models.BooleanField(default=False)
     purchases = models.ForeignKey(Listing, blank=True, null=True)
+
+
+class Authenticator (models.Model):
+    userid = models.ForeignKey(Merchant)
+    authenticator = models.CharField(max_length=255, primary_key=True)
+    datecreated = models.DateTimeField()
     
 class Message(models.Model):
     sender = models.ForeignKey(Merchant, related_name='message_sender')

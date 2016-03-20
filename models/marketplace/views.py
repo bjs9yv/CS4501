@@ -1,10 +1,13 @@
 from rest_framework import viewsets
 from .serializers import ListingSerializer, TransactionSerializer, MessageSerializer, MerchantSerializer
-from .models import Listing, Merchant, Message, Transaction
+from .models import Listing, Merchant, Message, Transaction, Authenticator
 import os
 import hmac
-from .settings import SECRET_KEY
+
+from django.conf import settings
+
 import json
+import datetime
 from django.http import HttpResponse
 
 class ListingViewSet(viewsets.ModelViewSet):
@@ -46,13 +49,24 @@ def create_user(request):
     else:
         return HttpResponse(json.dumps({'create': False, 'response': 'Missing Username and/or password'}))
 
-def verify_user(response):
-    user = Merchants.objects.filter(username=request.GET['username'], password = request.GET['password'])
-    authenticator = None
-    if user.exists():
-        authenticator = hmac.new (key = settings.SECRET_KEY.encode('utf-8'), msg = os.urandom(32), digestmod = 'sha256').hexdigest()
-    return HttpResponse(json.dumps({'authenticator': authenticator}))
+def verify_user(request):
 
+    if request.method != 'GET':
+        return HttpResponse(json.dumps({'verify': False, 'response': 'Wrong HTTP request.'}))
+
+    user = Merchant.objects.filter(username=request.GET['username'], password = request.GET['password'])
     
-            
+    if user.exists():
+        new_auth = Authenticator.objects.create()
+        new_auth.datecreated = datetime.datetime.now() 
+        new_auth.authenticator = hmac.new (key = settings.SECRET_KEY.encode('utf-8'), msg = os.urandom(32), digestmod = 'sha256').hexdigest()
+                
+        user2 = models.Merchant.objects.filter(username=request.GET['username'])
+        #if user2.exists():
+        new_auth.userid = user2[0].pk
+        new_auth.save()
 
+        return HttpResponse(json.dumps({'verify':True, 'authenticator': new_auth.authenticator}))
+
+    else:
+        return HttpResponse(json.dumps({'verify':False, 'response': 'incorrect user.invalid credentials'}))
