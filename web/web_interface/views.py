@@ -28,7 +28,7 @@ def login(request):
             password = make_password(form.cleaned_data['password'])
             next = form.cleaned_data.get('next') or reverse('home')
             resp = login_exp_api(username, password)
-            if not resp or not resp['ok']:
+            if not resp or not resp['response']:
                 # couldnt log them in, send back to login page with error
                 # TODO: unpack errors from resp
                 errors = resp['errors']

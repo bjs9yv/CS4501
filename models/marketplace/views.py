@@ -55,12 +55,11 @@ def verify_user(request):
     if user.exists():
         user = Merchant.objects.get(username=request.GET['username'])
         if user.password != request.GET['password']:
-            # worng password, for security reasons we use a vaugue error message
+            # worng password, but for security reasons we use a vaugue error message
             return HttpResponse(json.dumps({'verify':False, 'response': 'Incorrect username and/or password'}))
         datecreated = datetime.datetime.now()
         authenticator = hmac.new (key = settings.SECRET_KEY.encode('utf-8'), msg = os.urandom(32), digestmod = 'sha256').hexdigest()
-        userid = user
-        new_auth = Authenticator(userid=userid, authenticator=authenticator, datecreated=datecreated)
+        new_auth = Authenticator(userid=user, authenticator=authenticator, datecreated=datecreated)
         new_auth.save()
         return HttpResponse(json.dumps({'verify':True, 'authenticator': new_auth.authenticator}))
     else:
