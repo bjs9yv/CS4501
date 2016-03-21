@@ -3,11 +3,9 @@ from .serializers import ListingSerializer, TransactionSerializer, MessageSerial
 from .models import Listing, Merchant, Message, Transaction, Authenticator
 import os
 import hmac
-
-from django.conf import settings
-
 import json
 import datetime
+from django.conf import settings
 from django.http import HttpResponse
 
 class ListingViewSet(viewsets.ModelViewSet):
@@ -17,7 +15,6 @@ class ListingViewSet(viewsets.ModelViewSet):
     queryset = Listing.objects.all()
     serializer_class = ListingSerializer
 
-    # doesnt do anythong/ dont know how to make it work
     def get(self, request, format=None):
         return Listing.objects.filter(id=request.GET['listing_id'])
          
@@ -37,7 +34,6 @@ class MerchantViewSet(viewsets.ModelViewSet):
 def create_user(request):
     if request.method != 'GET':
         return HttpResponse(json.dumps({'create': False, 'response': 'Bad request. Use GET'}))
-
     if 'username' in request.GET and 'password' in request.GET:
         username = request.GET['username']
         password = request.GET['password']
@@ -55,14 +51,17 @@ def create_user(request):
 def verify_user(request):
     if request.method != 'GET':
         return HttpResponse(json.dumps({'verify': False, 'response': 'Wrong HTTP request.'}))
-    user = Merchant.objects.filter(username=request.GET['username'], password = request.GET['password'])
+    user = Merchant.objects.filter(username=request.GET['username'])
     if user.exists():
-        return HttpResponse(user)
-        datecreated = datetime.datetime.now() 
+        user = Merchant.objects.get(username=request.GET['username'])
+        if user.password != request.GET['password']:
+            # worng password, for security reasons we use a vaugue error message
+            return HttpResponse(json.dumps({'verify':False, 'response': 'Incorrect username and/or password'}))
+        datecreated = datetime.datetime.now()
         authenticator = hmac.new (key = settings.SECRET_KEY.encode('utf-8'), msg = os.urandom(32), digestmod = 'sha256').hexdigest()
-        userid = user.id()
+        userid = user
         new_auth = Authenticator(userid=userid, authenticator=authenticator, datecreated=datecreated)
         new_auth.save()
         return HttpResponse(json.dumps({'verify':True, 'authenticator': new_auth.authenticator}))
     else:
-        return HttpResponse(json.dumps({'verify':False, 'response': 'incorrect user.invalid credentials'}))
+        return HttpResponse(json.dumps({'verify':False, 'response': 'Incorrect username and/or password'}))
