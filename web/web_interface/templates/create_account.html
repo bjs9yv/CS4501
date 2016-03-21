@@ -3,6 +3,11 @@
 <h2>Create an Account</h2>
     <form method="post" autocomplete="off" action="{% url 'create_account' %}">
       <fieldset>
+	{% if errors %}
+	<li>{{ errors }}</li>
+	<br>
+	{% endif %}
+
 	{% for field in form %}
 	{{ field.label_tag }}
 	<br>

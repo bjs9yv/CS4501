@@ -5,8 +5,8 @@ from django.core.urlresolvers import reverse
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
-from django.contrib.auth.hashers import make_password, check_password
 from urllib.request import urlopen
+import base64
 import urllib.request
 import urllib.parse
 import json
@@ -25,18 +25,16 @@ def login(request):
         form = LoginForm(data=request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
-            password = make_password(form.cleaned_data['password'])
+            password = form.cleaned_data['password']
             next = form.cleaned_data.get('next') or reverse('home')
             resp = login_exp_api(username, password)
-            if not resp or not resp['response']:
+            if not resp or not resp['ok']:
                 # couldnt log them in, send back to login page with error
-                # TODO: unpack errors from resp
-                errors = resp['errors']
+                errors = resp['response']
                 context = {'form': form, 'errors': errors}
-                # TODO: in .html do something with the errors
                 return render(request, 'loginpage.html', context)
             # logged in, set login cookie and redirect to wherever they came from
-            authenticator = resp['resp']['authenticator']
+            authenticator = resp['response']['authenticator']
             response = HttpResponseRedirect(next)
             response.set_cookie("auth", authenticator)
             return response
@@ -54,15 +52,16 @@ def create_account(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
-            password = make_password(password)
+            password = password
             # make API call to exp layer
             resp = create_account_exp_api(username, password)
             if 'create' in resp:
-                if resp['create'] == True:
+                if resp['create']:
                     return HttpResponseRedirect(reverse('login'))
-                elif resp['create'] == False:
-                    context = {}
-                    # TODO: failed to make account, username taken?
+                else:
+                    # failed to make account, report error
+                    errors = resp['response']
+                    context = {'form': form, 'errors': errors}
                     return render(request, 'create_account.html', context)
             return HttpResponse(resp)
     else:

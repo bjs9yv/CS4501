@@ -5,6 +5,8 @@ import os
 import hmac
 import json
 import datetime
+import base64
+from django.contrib.auth.hashers import check_password, make_password
 from django.conf import settings
 from django.http import HttpResponse
 
@@ -42,7 +44,7 @@ def create_user(request):
             return HttpResponse(json.dumps({'create': False, 'response': 'Username taken'}))
         new_user = Merchant.objects.create()
         new_user.username = username
-        new_user.password = password
+        new_user.password = make_password(password)
         new_user.save()
         return HttpResponse(json.dumps({'create': True, 'response': 'New User created'}))
     else:
@@ -50,17 +52,18 @@ def create_user(request):
 
 def verify_user(request):
     if request.method != 'GET':
-        return HttpResponse(json.dumps({'verify': False, 'response': 'Wrong HTTP request.'}))
+        return HttpResponse(json.dumps({'ok': False, 'response': 'Wrong HTTP request.'}))
     user = Merchant.objects.filter(username=request.GET['username'])
     if user.exists():
         user = Merchant.objects.get(username=request.GET['username'])
-        if user.password != request.GET['password']:
-            # worng password, but for security reasons we use a vaugue error message
-            return HttpResponse(json.dumps({'verify':False, 'response': 'Incorrect username and/or password'}))
+        #return HttpResponse(request.GET['password'] + ' ' + user.password + ' '+ str(check_password(request.GET['password'], user.password))) 
+        if not check_password(request.GET['password'], user.password):
+            # wrong password, but for security reasons we use a vaugue error message
+            return HttpResponse(json.dumps({'ok':False, 'response':request.GET['password'] + ' ' + user.password + ' '+ str(check_password(request.GET['password'], user.password)) }))
         datecreated = datetime.datetime.now()
         authenticator = hmac.new (key = settings.SECRET_KEY.encode('utf-8'), msg = os.urandom(32), digestmod = 'sha256').hexdigest()
         new_auth = Authenticator(userid=user, authenticator=authenticator, datecreated=datecreated)
         new_auth.save()
-        return HttpResponse(json.dumps({'verify':True, 'authenticator': new_auth.authenticator}))
+        return HttpResponse(json.dumps({'ok':True, 'response':{'authenticator': new_auth.authenticator}}))
     else:
-        return HttpResponse(json.dumps({'verify':False, 'response': 'Incorrect username and/or password'}))
+        return HttpResponse(json.dumps({'ok':False, 'response': 'Incorrect username and/or password '}))
