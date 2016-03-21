@@ -1,4 +1,5 @@
 from django import forms
+from django.core.urlresolvers import reverse
 
 class RegistrationForm(forms.Form):
     username = forms.CharField(label='Username', max_length=15, label_suffix='')

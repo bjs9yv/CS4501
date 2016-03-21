@@ -36,37 +36,33 @@ class MerchantViewSet(viewsets.ModelViewSet):
 
 def create_user(request):
     if request.method != 'GET':
-        return HttpResponse(json.dumps({'create': False, 'Response': 'Bad request. Use GET'}))
+        return HttpResponse(json.dumps({'create': False, 'response': 'Bad request. Use GET'}))
 
     if 'username' in request.GET and 'password' in request.GET:
-        # TODO: check to see if username is taken
+        username = request.GET['username']
+        password = request.GET['password']
+        if Merchant.objects.filter(username=username):
+            # check to see if username is already taken
+            return HttpResponse(json.dumps({'create': False, 'response': 'Username taken'}))
         new_user = Merchant.objects.create()
-        new_user.username = request.GET['username']
-        new_user.password = request.GET['password']
+        new_user.username = username
+        new_user.password = password
         new_user.save()
         return HttpResponse(json.dumps({'create': True, 'response': 'New User created'}))
-
     else:
         return HttpResponse(json.dumps({'create': False, 'response': 'Missing Username and/or password'}))
 
 def verify_user(request):
-
     if request.method != 'GET':
         return HttpResponse(json.dumps({'verify': False, 'response': 'Wrong HTTP request.'}))
-
     user = Merchant.objects.filter(username=request.GET['username'], password = request.GET['password'])
-    
     if user.exists():
-        new_auth = Authenticator.objects.create()
-        new_auth.datecreated = datetime.datetime.now() 
-        new_auth.authenticator = hmac.new (key = settings.SECRET_KEY.encode('utf-8'), msg = os.urandom(32), digestmod = 'sha256').hexdigest()
-                
-        user2 = models.Merchant.objects.filter(username=request.GET['username'])
-        #if user2.exists():
-        new_auth.userid = user2[0].pk
+        return HttpResponse(user)
+        datecreated = datetime.datetime.now() 
+        authenticator = hmac.new (key = settings.SECRET_KEY.encode('utf-8'), msg = os.urandom(32), digestmod = 'sha256').hexdigest()
+        userid = user.id()
+        new_auth = Authenticator(userid=userid, authenticator=authenticator, datecreated=datecreated)
         new_auth.save()
-
         return HttpResponse(json.dumps({'verify':True, 'authenticator': new_auth.authenticator}))
-
     else:
         return HttpResponse(json.dumps({'verify':False, 'response': 'incorrect user.invalid credentials'}))

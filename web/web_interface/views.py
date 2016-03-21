@@ -12,8 +12,12 @@ import urllib.parse
 import json
 from .forms import RegistrationForm, LoginForm
 
+@sensitive_post_parameters('username', 'password')
+@csrf_protect
+@never_cache
 def login(request):
     if request.method == "GET":
+        next = request.GET.get('next') or reverse('home')
         form = LoginForm()
         context = {'form': form}
         return render(request, 'loginpage.html', context)
@@ -22,7 +26,24 @@ def login(request):
         if form.is_valid():
             username = form.cleaned_data['username']
             password = make_password(form.cleaned_data['password'])
-            # make API call to exp layer
+            next = form.cleaned_data.get('next') or reverse('home')
+            resp = login_exp_api(username, password)
+            if not resp or not resp['ok']:
+                # couldnt log them in, send back to login page with error
+                # TODO: unpack errors from resp
+                errors = resp['errors']
+                context = {'form': form, 'errors': errors}
+                # TODO: in .html do something with the errors
+                return render(request, 'loginpage.html', context)
+            # logged in, set login cookie and redirect to wherever they came from
+            authenticator = resp['resp']['authenticator']
+            response = HttpResponseRedirect(next)
+            response.set_cookie("auth", authenticator)
+            return response
+    else:
+        form = LoginForm()
+        context = {'form': form}
+        return render(request, 'loginpage.html', context)
 
 @sensitive_post_parameters('username', 'password1', 'password2')
 @csrf_protect
@@ -35,11 +56,7 @@ def create_account(request):
             password = form.cleaned_data['password1']
             password = make_password(password)
             # make API call to exp layer
-            url = 'http://exp-api:8000/create_user/'
-            url += '?username=%s&password=%s' % (username, password)
-            req = urllib.request.Request(url)
-            resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-            resp = json.loads(resp_json)
+            resp = create_account_exp_api(username, password)
             if 'create' in resp:
                 if resp['create'] == True:
                     return HttpResponseRedirect(reverse('login'))
@@ -54,13 +71,16 @@ def create_account(request):
     return render(request, 'create_account.html', context)
 
 def home(request):
-    url = 'http://exp-api:8000/recent_listings'
-    req = urllib.request.Request(url)
-    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-    resp = json.loads(resp_json)    
+    resp = recent_listings_exp_api()
     return render(request, 'homepage.html', resp)
 
-
+def create_listing(request):
+    auth = request.COOKIES.get('auth')
+    if not auth:
+      # handle user not logged in while trying to create a listing
+      return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing"))
+    
+    
 def listing(request, listing_id):
     url = 'http://exp-api:8000/listing_service/?listing_id='
     url += str(listing_id)
@@ -68,3 +88,26 @@ def listing(request, listing_id):
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     resp = json.loads(resp_json)
     return render(request, 'listing.html', resp)
+
+def recent_listings_exp_api():
+    url = 'http://exp-api:8000/recent_listings'
+    req = urllib.request.Request(url)
+    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+    resp = json.loads(resp_json)    
+    return resp
+
+def create_account_exp_api(username, password):
+    url = 'http://exp-api:8000/create_user/'
+    url += '?username=%s&password=%s' % (username, password)
+    req = urllib.request.Request(url)
+    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+    resp = json.loads(resp_json)
+    return resp
+
+def login_exp_api(username, password):
+    url = 'http://exp-api:8000/login/'
+    url += '?username=%s&password=%s' % (username, password)
+    req = urllib.request.Request(url)
+    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+    resp = json.loads(resp_json)
+    return resp
