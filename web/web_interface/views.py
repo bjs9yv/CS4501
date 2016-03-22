@@ -154,5 +154,14 @@ def create_listing_exp_api(title, description, bitcoin_cost, quantity_available)
     url = 'http://exp-api:8000/create_listing/'
     url += '?title=%s' % (title)
     url += '?description=%s' % (description)
+
+    req = urllib.request.Request(url)
+    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+    resp = json.loads(resp_json)
+    return resp
+
+
+    
 #    url += '?bitcoin_cost=%s' % (bitcoin_cost)
 #    url += '?quantity_available=%s' % (quantity_available)
+
