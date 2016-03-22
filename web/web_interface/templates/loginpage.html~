@@ -1,0 +1,17 @@
+<!doctype html>
+
+<h2>Please Log In</h2>
+    <form method="post" autocomplete="off" action="{% url 'login' %}">
+        <fieldset>
+	{% for field in form %}
+	  {{ field.label_tag }}
+	  <br>
+	  {{ field }}
+	  {{ field.errors }}
+	  <br>
+	{% endfor %}
+	<input type="submit" value="Enter Site" />
+      </fieldset>
+      {% csrf_token %}
+    </form>
+
