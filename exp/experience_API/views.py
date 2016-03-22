@@ -1,10 +1,18 @@
+import requests
 import urllib.request
 import urllib.parse
 import json
 from django.http import HttpResponse
 
 def create_listing_service(request):
-    pass
+    if 'data' in request.POST:
+        url = 'http://models-api:8000/listing/'
+        postdata = request.POST['data']
+        r = requests.post(url, data=postdata)
+        return HttpResponse(r)
+    else:
+        # return bad http post error code
+        return HttpResponse(400) 
 
 def listing_service(request):
     if 'listing_id' in request.GET:

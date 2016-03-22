@@ -1,3 +1,4 @@
+import requests
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.shortcuts import render
@@ -99,10 +100,9 @@ def create_listing(request):
             description = form.cleaned_data['description']
             bitcoin_cost = form.cleaned_data['bitcoin_cost']
             quantity_available = form.cleaned_data['quantity_available']
-
             resp = create_listing_exp_api(title, description, bitcoin_cost, quantity_available)
-
-            if not resp or not resp['ok']:
+            HttpResponse(resp)
+            if not resp or not '200':
                 errors = resp['response']
                 context = {'form': form, 'errors': errors}
                 return render(request, 'create_listing.html', context)
@@ -152,13 +152,12 @@ def logout_exp_api(auth):
 
 def create_listing_exp_api(title, description, bitcoin_cost, quantity_available):
     url = 'http://exp-api:8000/create_listing/'
-    url += '?title=%s' % (title)
-    url += '?description=%s' % (description)
-    #    url += '?bitcoin_cost=%s' % (bitcoin_cost)
-    #    url += '?quantity_available=%s' % (quantity_available)
-    req = urllib.request.Request(url)
-    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-    resp = json.loads(resp_json)
-    return resp
+    url = 'http://models-api:8000/listing/'
+    postdata = {'title': title,
+                'description': description,
+                'bitcoin_cost': bitcoin_cost,
+                'quantity_available': quantity_available}
+    r = requests.post(url, data=postdata)
+    return r.status_code
 
 

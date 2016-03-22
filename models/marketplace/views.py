@@ -1,3 +1,4 @@
+import requests
 from rest_framework import viewsets
 from .serializers import ListingSerializer, TransactionSerializer, MessageSerializer, MerchantSerializer
 from .models import Listing, Merchant, Message, Transaction, Authenticator
@@ -31,6 +32,8 @@ class MerchantViewSet(viewsets.ModelViewSet):
     queryset = Merchant.objects.all()
     serializer_class = MerchantSerializer
 
+def create_listing(request):
+    pass
 
 def create_user(request):
     if request.method != 'GET':
