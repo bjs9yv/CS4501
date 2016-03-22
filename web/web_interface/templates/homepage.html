@@ -1,6 +1,8 @@
 Welcome!
-<br>
-<a href="{% url 'login' %}">Login</a>
+{% if not auth %}
+  <br>
+  <a href="{% url 'login' %}">Login</a>
+{% endif %}
 <br>
 <a href="{% url 'create_account' %}">Create Account</a>
 <br>

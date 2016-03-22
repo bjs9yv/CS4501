@@ -78,9 +78,12 @@ def verify_user(request):
 def logout(request):
     if 'auth' in request.GET:
         auth = request.GET['auth']
-        authenticator = Authenticator.objects.get(auth)
-        authenticator.delete()
-        return HttpResponse(json.dumps({'ok':True,'response':'Thank you, you are now logged out'}))
+        authenticator = Authenticator.objects.filter(authenticator=auth)
+        if authenticator:
+            authenticator = Authenticator.objects.get(authenticator=auth)
+            authenticator.delete()
+            return HttpResponse(json.dumps({'ok':True,'response':'Thank you, you are now logged out'}))
+        return HttpResponse(json.dumps({'ok':True,'response':'Thats funny it looks like youre already logged out'}))
     else:
         resp = {'response':'it looks like you are already logged out'}
         resp_json = json.dumps(resp)

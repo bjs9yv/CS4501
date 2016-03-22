@@ -46,8 +46,10 @@ def login(request):
 def logout(request):
     auth = request.COOKIES.get('auth')
     resp = logout_exp_api(auth)
-    context = {'response': response}
-    return render(request, 'logout.html', context)
+    context = {'response': resp}
+    response = TemplateResponse(request,'logout.html', context)
+    response.delete_cookie('auth')
+    return response
 
 @sensitive_post_parameters('username', 'password1', 'password2')
 @csrf_protect
