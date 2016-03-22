@@ -100,7 +100,11 @@ def create_listing(request):
             bitcoin_cost = form.cleaned_data['bitcoin_cost']
             quantity_available = form.cleaned_data['quantity_available']
 
+
             resp = create_listing_exp_api(title, description, bitcoin_cost, quantity_available)
+
+
+
             if not resp or not resp['ok']:
                 errors = resp['response']
                 context = {'form': form, 'errors': errors}
@@ -153,9 +157,15 @@ def logout_exp_api(auth):
     resp = json.loads(resp_json)
     return resp
 
+<<<<<<< HEAD
 def create_listing_exp_api(title, description, bitcoin_cost, quantity_available):
     url = 'http://exp-api:8000/create_listing/'
     url += '?title=%s' % (title)
     url += '?description=%s' % (description)
 #    url += '?bitcoin_cost=%s' % (bitcoin_cost)
 #    url += '?quantity_available=%s' % (quantity_available)
+=======
+def create_listing_exp_api():
+    pass
+    
+>>>>>>> f30411a08d2342c3ef7eca607c4fe54a4f13c235
