@@ -100,7 +100,7 @@ def create_listing(request):
             bitcoin_cost = form.cleaned_data['bitcoin_cost']
             quantity_available = form.cleaned_data['quantity_available']
 
-            resp = create_listing_exp_api(
+            resp = create_listing_exp_api()
             if not resp or not resp['ok']:
                 errors = resp['response']
                 context = {'form': form, 'errors': errors}
@@ -153,5 +153,6 @@ def logout_exp_api(auth):
     resp = json.loads(resp_json)
     return resp
 
-def create_listing_exp_api(...):
+def create_listing_exp_api():
+    pass
     
