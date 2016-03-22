@@ -1,0 +1,31 @@
+<!doctype html>
+
+<h2>Create New Listing</h2>
+<form method="post" autocomplete="off" action="{% url 'create_listing' %}">
+  <fieldset>
+    {% if errors %}
+    <li>{{ errors }}</li>
+    <br>
+    {% endif %}
+
+    {% for field in form %}
+    {{ field.label_tag }}
+    <br>
+    {{ field }}
+    {{ field.errors }}
+    <br>
+    {% endfor %}
+    <input type="submit" value="submit" />
+  </fieldset>
+  {% csrf_token %}
+</form>
+
+
+
+
+
+
+
+
+
+
