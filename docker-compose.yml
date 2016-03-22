@@ -4,7 +4,7 @@ models:
      - mysql:db
    volumes:
      - ./models/:/app
-   command: bash -c "python manage.py loaddata && mod_wsgi-express start-server --reload-on-changes /app/marketplace/wsgi.py &"
+   command: mod_wsgi-express start-server --reload-on-changes /app/marketplace/wsgi.py &
    ports:
      - "8001:8000"
 exp:
