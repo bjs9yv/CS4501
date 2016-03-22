@@ -1,4 +1,5 @@
 import requests
+from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.shortcuts import render
@@ -94,18 +95,20 @@ def create_listing(request):
         context = {'form': form}
         return render (request, 'create_listing.html', context )
     elif request.method == 'POST':
-        form = CreateListing(data=request.POST)
+        form = CreateListingForm(data=request.POST)
         if form.is_valid():
             title = form.cleaned_data['title']
             description = form.cleaned_data['description']
             bitcoin_cost = form.cleaned_data['bitcoin_cost']
             quantity_available = form.cleaned_data['quantity_available']
             resp = create_listing_exp_api(title, description, bitcoin_cost, quantity_available)
-            HttpResponse(resp)
-            if not resp or not '200':
-                errors = resp['response']
+            if not resp or not '201':
+                errors = 'Sorry please refresh and try again' 
                 context = {'form': form, 'errors': errors}
                 return render(request, 'create_listing.html', context)
+            else:
+                # redirect to success page
+                return TemplateResponse(request, 'listing_success.html', {})
         else:
             form = CreateListing()
             context = {'form': form}
@@ -150,14 +153,15 @@ def logout_exp_api(auth):
     resp = json.loads(resp_json)
     return resp
 
+@csrf_exempt
 def create_listing_exp_api(title, description, bitcoin_cost, quantity_available):
-    url = 'http://exp-api:8000/create_listing/'
-    url = 'http://models-api:8000/listing/'
+    url = 'http://exp-api:8000/create_listing_service/?'
     postdata = {'title': title,
                 'description': description,
                 'bitcoin_cost': bitcoin_cost,
                 'quantity_available': quantity_available}
+    
     r = requests.post(url, data=postdata)
-    return r.status_code
+    return r
 
 

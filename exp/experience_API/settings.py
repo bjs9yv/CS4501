@@ -39,6 +39,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles'
 )
 
+CSRF_COOKIE_SECURE = False
+
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

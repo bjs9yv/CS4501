@@ -1,0 +1,3 @@
+Success!
+<br>
+<a href="{% url 'create_listing' %}">Make a new Listing</a>

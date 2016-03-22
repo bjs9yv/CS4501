@@ -3,16 +3,20 @@ import urllib.request
 import urllib.parse
 import json
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 
+@csrf_exempt
 def create_listing_service(request):
-    if 'data' in request.POST:
+    if request.method == "POST":
         url = 'http://models-api:8000/listing/'
-        postdata = request.POST['data']
+        postdata = {'title': request.POST['title'],
+                    'description': request.POST['description'],
+                    'bitcoin_cost': request.POST['bitcoin_cost'],
+                    'quantity_available': request.POST['quantity_available']}
         r = requests.post(url, data=postdata)
-        return HttpResponse(r)
+        return HttpResponse(r.status_code)
     else:
-        # return bad http post error code
-        return HttpResponse(400) 
+        return HttpResponse('400')
 
 def listing_service(request):
     if 'listing_id' in request.GET:

@@ -2,6 +2,7 @@
 
 <h2>Create New Listing</h2>
 <form method="post" autocomplete="off" action="{% url 'create_listing' %}">
+  {% csrf_token %}
   <fieldset>
     {% if errors %}
     <li>{{ errors }}</li>
@@ -17,7 +18,7 @@
     {% endfor %}
     <input type="submit" value="submit" />
   </fieldset>
-  {% csrf_token %}
+  
 </form>
 
 
