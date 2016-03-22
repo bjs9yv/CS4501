@@ -85,7 +85,31 @@ def create_listing(request):
     auth = request.COOKIES.get('auth')
     if not auth:
       # handle user not logged in while trying to create a listing
-      return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing"))
+        return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing"))
+    if request.method == 'GET':
+        form = CreateListing()
+        context = {'form': form}
+        return render (request, 'create_listing.html', context )
+    elif request.method == 'POST':
+        form = CreateListing(data=request.POST)
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            description = form.cleaned_data['description']
+            bitcoin_cost = form.cleaned_data['bitcoin_cost']
+            quantity_available = form.cleaned_data['quantity_available']
+
+            resp = create_listing_exp_api(
+            if not resp or not resp['ok']:
+                errors = resp['response']
+                context = {'form': form, 'errors': errors}
+                return render(request, 'create_listing.html', context)
+        else:
+            form = CreateListing()
+            context = {'form': form}
+            return render (request, 'create_listing.html', context)
+                
+            
+  
     
     
 def listing(request, listing_id):
@@ -126,3 +150,6 @@ def logout_exp_api(auth):
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     resp = json.loads(resp_json)
     return resp
+
+def create_listing_exp_api(...):
+    
