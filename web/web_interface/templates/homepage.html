@@ -14,6 +14,10 @@ Recent Listings:
 {% endfor %}
 <br>
 <br>
+Create A Listing
+<br>
+<a href="{% url 'create_listing' %}">New Listing</a>
+<br>
 {% if auth %}
   <a href="{% url 'logout' %}">Logout</a>
 {% endif %}

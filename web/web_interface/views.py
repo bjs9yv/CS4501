@@ -10,7 +10,7 @@ import base64
 import urllib.request
 import urllib.parse
 import json
-from .forms import RegistrationForm, LoginForm
+from .forms import RegistrationForm, LoginForm, CreateListingForm
 
 @sensitive_post_parameters('username', 'password')
 @csrf_protect
@@ -89,7 +89,7 @@ def create_listing(request):
       # handle user not logged in while trying to create a listing
         return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing"))
     if request.method == 'GET':
-        form = CreateListing()
+        form = CreateListingForm()
         context = {'form': form}
         return render (request, 'create_listing.html', context )
     elif request.method == 'POST':
@@ -154,14 +154,11 @@ def create_listing_exp_api(title, description, bitcoin_cost, quantity_available)
     url = 'http://exp-api:8000/create_listing/'
     url += '?title=%s' % (title)
     url += '?description=%s' % (description)
-
+    #    url += '?bitcoin_cost=%s' % (bitcoin_cost)
+    #    url += '?quantity_available=%s' % (quantity_available)
     req = urllib.request.Request(url)
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     resp = json.loads(resp_json)
     return resp
 
-
-    
-#    url += '?bitcoin_cost=%s' % (bitcoin_cost)
-#    url += '?quantity_available=%s' % (quantity_available)
 
