@@ -43,6 +43,12 @@ def login(request):
         context = {'form': form}
         return render(request, 'loginpage.html', context)
 
+def logout(request):
+    auth = request.COOKIES.get('auth')
+    resp = logout_exp_api(auth)
+    context = {'response': response}
+    return render(request, 'logout.html', context)
+
 @sensitive_post_parameters('username', 'password1', 'password2')
 @csrf_protect
 @never_cache
@@ -70,8 +76,10 @@ def create_account(request):
     return render(request, 'create_account.html', context)
 
 def home(request):
-    resp = recent_listings_exp_api()
-    return render(request, 'homepage.html', resp)
+    results = recent_listings_exp_api()
+    auth = request.COOKIES.get('auth')
+    context = {'results':results['results'], 'auth': auth}
+    return render(request, 'homepage.html', context)
 
 def create_listing(request):
     auth = request.COOKIES.get('auth')
@@ -106,6 +114,14 @@ def create_account_exp_api(username, password):
 def login_exp_api(username, password):
     url = 'http://exp-api:8000/login/'
     url += '?username=%s&password=%s' % (username, password)
+    req = urllib.request.Request(url)
+    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+    resp = json.loads(resp_json)
+    return resp
+
+def logout_exp_api(auth):
+    url = 'http://exp-api:8000/logout/'
+    url += '?auth=%s' % (auth)
     req = urllib.request.Request(url)
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
     resp = json.loads(resp_json)

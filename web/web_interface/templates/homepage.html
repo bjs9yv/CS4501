@@ -10,3 +10,8 @@ Recent Listings:
 {% for item in results %}
    <a href="{% url 'listing' item.id %}">{{ item.title }}</a>
 {% endfor %}
+<br>
+<br>
+{% if auth %}
+  <a href="{% url 'logout' %}">Logout</a>
+{% endif %}

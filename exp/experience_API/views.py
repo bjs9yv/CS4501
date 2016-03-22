@@ -16,8 +16,19 @@ def listing_service(request):
 def recent_listings(request):
     req = urllib.request.Request('http://models-api:8000/listing')
     resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-    # TODO: load json, cut it down to 10 most recent listings 
     return HttpResponse(resp_json)
+
+def logout(request):
+    if 'auth' in request.GET:
+        auth = request.GET['auth']
+        url = 'http://models-api:8000/logout/?auth=%s' % (auth)
+        req = urllib.request.Request(url)
+        resp_json = urllib.request.urlopen(req).read().decode('utf-8')
+        return HttpResponse(resp_json)
+    else:
+        resp = {'response':'it looks like you are already logged out'}
+        resp_json = json.dumps(resp)
+        return HttpResponse(resp_json)
 
 def login(request):
     if 'username' in request.GET and 'password' in request.GET:
@@ -40,4 +51,4 @@ def create_user(request):
         resp_json = urllib.request.urlopen(req).read().decode('utf-8')
         return HttpResponse(resp_json)
     else:
-        return HttpResponse('something broke')
+        return HttpResponse(json.dumps({'response':'something broke'}))
