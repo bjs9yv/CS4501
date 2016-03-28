@@ -1,21 +1,35 @@
 # Overview
 
-- Four Tier Django web application for CS 4501 Internet Scale Applications
+- Four Tier Django web application built on Docker containers
   - Layer 1: MySQL database
+    - Migrations: Django fixtures 
   - Layer 2: Models API
+    - API: Django Rest API
   - Layer 3: Service level API
+    - Search: Kafka/zookeeper queuing + Elastic Search (ES) 
   - Layer 4: Web Interface
+    - Bootstrap
 
 # Requirements
 
 - Django 1.8.8
 - Python 3.4.3
-- Djangorestframework
+- Docker 1.9.1
+- Containers handle the rest!
+
+# Running the project
+
+'''
+git clone https://github.com/bjs9yv/CS4501.git
+docker-compose build
+docker-compose up
+'''
+direct your browser to http://localhost:8000/
 
 # Models
 
-### User 
-- Username (10 character alpha-numeric string)
+### User/Merchant 
+- Username (string)
 - Public key (string)
 - Bitcoin credit (float)
 - One or more Bitcoin accounts (string)
