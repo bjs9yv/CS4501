@@ -4,7 +4,7 @@ models:
      - mysql:db
    volumes:
      - ./models/:/app
-   command: mod_wsgi-express start-server --reload-on-changes /app/marketplace/wsgi.py &
+   command: bash -c "python manage.py loaddata models/fixtures/db1.json && mod_wsgi-express start-server --reload-on-changes /app/marketplace/wsgi.py"
    ports:
      - "8001:8000"
 exp:
