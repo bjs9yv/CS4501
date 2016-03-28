@@ -19,11 +19,11 @@
 
 # Running the project
 
-'''
+```
 git clone https://github.com/bjs9yv/CS4501.git
 docker-compose build
 docker-compose up
-'''
+```
 direct your browser to http://localhost:8000/
 
 # Models
