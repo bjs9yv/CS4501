@@ -32,4 +32,4 @@ Direct your browser to http://localhost:8000/
   - Search: Kafka/zookeeper queuing + Elastic Search (ES) 
 
 # Layer 4: Web Interface
-  - Bootstrap
+  - UI: Bootstrap
