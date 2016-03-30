@@ -7,6 +7,7 @@ models:
    command: bash -c "python manage.py loaddata models/fixtures/db1.json && mod_wsgi-express start-server --reload-on-changes /app/marketplace/wsgi.py"
    ports:
      - "8001:8000"
+
 exp:
    build: .
    links:
@@ -16,6 +17,7 @@ exp:
    command: mod_wsgi-express start-server --reload-on-changes /app/experience_API/wsgi.py &
    ports:
      - "8002:8000"
+
 web:
    build: .
    links:
@@ -25,3 +27,26 @@ web:
    command: mod_wsgi-express start-server --reload-on-changes /app/web_interface/wsgi.py &
    ports:
      - "8000:8000"
+
+kafka:
+   image: spotify/kafka
+   container_name: kafka
+   environment:
+      ADVERTISED_HOST: kafka
+      ADVERTISED_PORT: 9092
+   hostname: kafka
+
+es:
+   image: elasticsearch:2.0
+   container_name: es
+   ports:
+      - "9200:9200"
+
+batch:
+   build: .
+   links:
+     - kafka:kafka
+   ports:
+     - "8003:8000"
+   volumes:
+     - ./batch/:/scripts
