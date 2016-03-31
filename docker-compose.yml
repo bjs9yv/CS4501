@@ -46,7 +46,10 @@ batch:
    build: .
    links:
      - kafka:kafka
+     - es:es
+   volumes:
+     - ./batch/:/batch-script
+   command: python /batch-script/kafka_ES_worker.py &
    ports:
      - "8003:8000"
-   volumes:
-     - ./batch/:/scripts
+   
