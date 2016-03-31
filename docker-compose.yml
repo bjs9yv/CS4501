@@ -12,6 +12,8 @@ exp:
    build: .
    links:
      - models:models-api
+     - kafka:kafka
+     - es:es
    volumes:
      - ./exp/:/app
    command: mod_wsgi-express start-server --reload-on-changes /app/experience_API/wsgi.py &
@@ -44,6 +46,8 @@ es:
 
 batch:
    build: .
+   environment:
+     - PYTHONUNBUFFERED=0
    links:
      - kafka:kafka
      - es:es
