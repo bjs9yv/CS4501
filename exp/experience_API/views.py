@@ -4,6 +4,17 @@ import urllib.parse
 import json
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from kafka import KafkaProducer
+from elasticsearch import Elasticsearch
+
+def search_results_service(request):
+    if 'query' in request.GET:
+        query = request.GET['query']
+        es = Elasticsearch(['es'])
+        results = es.search(index='listing_index', body={'query': {'query_string': {'query': query}}, 'size': 10})
+        return HttpResponse(results['hits']['hits'])
+    else:
+        return HttpResponse('missing query string')
 
 @csrf_exempt
 def create_listing_service(request):
@@ -14,6 +25,8 @@ def create_listing_service(request):
                     'bitcoin_cost': request.POST['bitcoin_cost'],
                     'quantity_available': request.POST['quantity_available']}
         r = requests.post(url, data=postdata)
+        producer = KafkaProducer(bootstrap_servers='kafka:9092')
+        producer.send('new-listings-topic', json.dumps(r.text).encode('utf-8'))
         return HttpResponse(r.status_code)
     else:
         return HttpResponse('400')

@@ -14,6 +14,14 @@ import urllib.parse
 import json
 from .forms import RegistrationForm, LoginForm, CreateListingForm
 
+def search(request):
+    if request.method == "GET":
+        if 'query' in request.GET:
+            query = request.GET['query']
+            resp = search_exp_api(query)
+            return HttpResponse(resp)
+    return HttpResponse('hi')
+
 @sensitive_post_parameters('username', 'password')
 @csrf_protect
 @never_cache
@@ -88,7 +96,7 @@ def home(request):
 def create_listing(request):
     auth = request.COOKIES.get('auth')
     if not auth:
-      # handle user not logged in while trying to create a listing
+        # handle user not logged in while trying to create a listing
         return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing"))
     if request.method == 'GET':
         form = CreateListingForm()
@@ -164,4 +172,8 @@ def create_listing_exp_api(title, description, bitcoin_cost, quantity_available)
     r = requests.post(url, data=postdata)
     return r
 
-
+def search_exp_api(query):
+    url = 'http://exp-api:8000/search_results_service/'
+    url += '?query=%s' % (query)
+    r = requests.get(url)
+    return r
