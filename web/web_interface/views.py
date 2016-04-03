@@ -1,4 +1,3 @@
-import requests
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.response import TemplateResponse
@@ -7,10 +6,7 @@ from django.core.urlresolvers import reverse
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
-from urllib.request import urlopen
-import base64
-import urllib.request
-import urllib.parse
+import requests
 import json
 from .forms import RegistrationForm, LoginForm, CreateListingForm
 
@@ -125,40 +121,30 @@ def create_listing(request):
 def listing(request, listing_id):
     url = 'http://exp-api:8000/listing_service/?listing_id='
     url += str(listing_id)
-    req = urllib.request.Request(url)
-    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-    resp = json.loads(resp_json)
+    resp = requests.get(url).json()
     return render(request, 'listing.html', resp)
 
 def recent_listings_exp_api():
     url = 'http://exp-api:8000/recent_listings'
-    req = urllib.request.Request(url)
-    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-    resp = json.loads(resp_json)    
+    resp = requests.get(url).json()
     return resp
 
 def create_account_exp_api(username, password):
     url = 'http://exp-api:8000/create_user/'
     url += '?username=%s&password=%s' % (username, password)
-    req = urllib.request.Request(url)
-    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-    resp = json.loads(resp_json)
+    resp = requests.get(url).json()
     return resp
 
 def login_exp_api(username, password):
     url = 'http://exp-api:8000/login/'
     url += '?username=%s&password=%s' % (username, password)
-    req = urllib.request.Request(url)
-    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-    resp = json.loads(resp_json)
+    resp = requests.get(url).json()
     return resp
 
 def logout_exp_api(auth):
     url = 'http://exp-api:8000/logout/'
     url += '?auth=%s' % (auth)
-    req = urllib.request.Request(url)
-    resp_json = urllib.request.urlopen(req).read().decode('utf-8')
-    resp = json.loads(resp_json)
+    resp = requests.get(url).json()
     return resp
 
 @csrf_exempt
