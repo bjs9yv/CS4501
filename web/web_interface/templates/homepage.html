@@ -51,9 +51,13 @@
       <ul class="nav navbar-nav">
         <li class="active"><a href="{% url 'home' %}">Home</a></li>
         <li><a href="{% url 'create_listing' %}">Create Listing</a></li>
+
+		
         <li><a href="#"></a></li>
         <li><a href="#"></a></li>
       </ul>
+
+      
       <ul class="nav navbar-nav navbar-right">
 	{% if not auth %}
         <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-user"></span> Login</a></li>
@@ -67,6 +71,13 @@
     </div>
   </div>
 </nav>
+
+<form method="GET" action="{% url 'search' %}">
+  <input type="text" name="query" />
+  <input type="submit"/>
+  </form>
+
+
 
 
 <div class="container">    
