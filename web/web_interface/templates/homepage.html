@@ -13,11 +13,12 @@
 
 {% include 'header_bar.html' %}
 
+<div class= "container" style= "margin-bottom:25px; " align = "center" >
 <form method="GET" action="{% url 'search' %}">
   <input type="text" name = "query" />
-  <input type="submit"/>
+  <input type="submit" value = "Search"/>
 </form>
-
+</div>
 
 
 
