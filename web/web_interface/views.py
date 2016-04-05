@@ -10,7 +10,7 @@ import requests
 import json
 from .forms import RegistrationForm, LoginForm, CreateListingForm
 from django.shortcuts import render_to_response
-from django.utils import simplejson
+
 
 def search(request):
     if request.method == "GET":
@@ -22,7 +22,7 @@ def search(request):
                                 #content_type= 'application/json')
             
 #            return JsonResponse(resp, safe =False)
-#            return render_to_response('listing.html',{'quantity_available': resp})
+#            return render(request, 'listing.html', dict(results=resp))
           
 
     return HttpResponse('hi')
@@ -172,4 +172,4 @@ def search_exp_api(query):
     url = 'http://exp-api:8000/search_results_service/'
     url += '?query=%s' % (query)
     r = requests.get(url)
-    return r.text
+    return r
