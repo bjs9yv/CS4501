@@ -1,5 +1,10 @@
-<h1> {{ title }} </h1>
-<p> Description:  </p>
-<p> Bitcoin_cost:  </p>
+{% if result %}
+{% for res in result  %}
+
+<li>{{res}}</li>
+
+{% endfor %}
+{% endif %}
+
 
 

@@ -17,12 +17,10 @@ def search(request):
         if 'query' in request.GET:
             query = request.GET['query']
             resp = (search_exp_api(query))
- 
-            return (JsonResponse(json.dumps(resp), safe= False))
-                                #content_type= 'application/json')
-            
-#            return JsonResponse(resp, safe =False)
-#            return render(request, 'listing.html', dict(results=resp))
+
+#            return render_to_response('search.html', {'result':resp})
+#            return (JsonResponse(json.dumps(resp), safe=False,content_type= 'application/json'))
+            return HttpResponse(resp)
           
 
     return HttpResponse('hi')
