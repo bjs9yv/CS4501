@@ -1,5 +1,5 @@
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template.response import TemplateResponse
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
@@ -9,14 +9,24 @@ from django.views.decorators.debug import sensitive_post_parameters
 import requests
 import json
 from .forms import RegistrationForm, LoginForm, CreateListingForm
+from django.shortcuts import render_to_response
+from django.utils import simplejson
 
 def search(request):
     if request.method == "GET":
         if 'query' in request.GET:
             query = request.GET['query']
-            resp = search_exp_api(query)
-            return HttpResponse(resp)
+            resp = (search_exp_api(query))
+ 
+            return (JsonResponse(json.dumps(resp), safe= False))
+                                #content_type= 'application/json')
+            
+#            return JsonResponse(resp, safe =False)
+#            return render_to_response('listing.html',{'quantity_available': resp})
+          
+
     return HttpResponse('hi')
+
 
 @sensitive_post_parameters('username', 'password')
 @csrf_protect
@@ -162,4 +172,4 @@ def search_exp_api(query):
     url = 'http://exp-api:8000/search_results_service/'
     url += '?query=%s' % (query)
     r = requests.get(url)
-    return r
+    return r.text

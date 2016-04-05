@@ -1,0 +1,11 @@
+<h1> {{ title }} </h1>
+<p> Description:  </p>
+<p> Bitcoin_cost:  </p>
+
+<h1> {{ title }} </h1>
+<p> Description: {{ description }} </p>
+<p> Bitcoin_cost: {{ bitcoin_cost }} </p>
+<!-- TODO: only {{quantity_available}} left in stock!-->
+<p> Quantity available: {{ quantity_available }} </p>
+
+
