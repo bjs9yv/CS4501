@@ -69,10 +69,13 @@ batch:
    
 loadbalancer:
    image: galexrt/pen:latest
+   environment:
+    - w stats.html
+    - l loadbalancer.log
    links:
     - web:web-api
-    - web2:web-api
+    - web2:web2-api
    container_name: loadbalancer
-   command: mod_wsgi-express start-server --reload-on-changes /app/web_interface/wsgi.py &
+   command: pen -u root -p 8005:8000
    ports:
     - "8005:8000"
