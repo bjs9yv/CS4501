@@ -85,6 +85,7 @@ DATABASES = {
           'default': {
           'ENGINE': 'mysql.connector.django',
 	  'NAME': 'cs4501',
+          'TEST_NAME':'test_cs4501',
           'USER': 'www',
           'PASSWORD': 'S3cure',
           'HOST': 'db',
@@ -111,3 +112,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+class DisableMigrations(object):
+    def __contains__(self, item):
+        return True
+    def __getitem__(self, item):
+        return "notmigrations"
+    
+MIGRATION_MODULES = DisableMigrations()
