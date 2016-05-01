@@ -11,7 +11,6 @@ import json
 from .forms import RegistrationForm, LoginForm, CreateListingForm
 from django.shortcuts import render_to_response
 
-
 def search(request):
     if request.method == "GET":
         if 'query' in request.GET:
@@ -25,7 +24,6 @@ def search(request):
 
     return HttpResponse('hi')
 
-
 @sensitive_post_parameters('username', 'password')
 @csrf_protect
 @never_cache
@@ -33,7 +31,7 @@ def login(request):
     if request.method == "GET":
         next = request.GET.get('next') or reverse('home')
         form = LoginForm()
-        context = {'form': form}
+        context = {'form': form, 'next': next}
         return render(request, 'loginpage.html', context)
     elif request.method == "POST":
         form = LoginForm(data=request.POST)
