@@ -1,7 +1,7 @@
 # Overview and Our Stack
 
-- Four Tier Django web application built on Docker containers
-  - Layer 1: MySQL database
+- Four Tier Microservice Django Web Application Built On Docker Containers
+  - Layer 1: [MySQL database](#layer-1-mysql-database)
   - Layer 2: Models API
   - Layer 3: Service level API
   - Layer 4: Web Interface

@@ -1,9 +1,9 @@
-Improve the look of search results, create listing, logout pages
-Add listings to a shopping cart if logged in
-Add listings to a shopping cart without being loged in (using cookies)
-Remove listings if you are the owner of them
-Add pictures of development process from iphone
-Clean up the codebase
+- ~~Improve the look of search results~~, create listing, logout pages
+- Add listings to a shopping cart if logged in
+- Add listings to a shopping cart without being loged in (using cookies)
+- Remove listings if you are the owner of them
+- Add pictures of development process from iphone
+- Clean up the codebase
 
 # Spark 
 
