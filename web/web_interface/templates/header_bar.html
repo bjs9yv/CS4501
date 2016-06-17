@@ -36,21 +36,31 @@
         <span class="icon-bar"></span>                        
       </button>
 
-    </div>
+     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
         <li class="active"><a href="{% url 'home' %}">Home</a></li>
         <li><a href="{% url 'create_listing' %}">Create Listing</a></li>
-        <li><a href="#"></a></li>
-        <li><a href="#"></a></li>
       </ul>
+      
+      <div class="col-sm-3 col-md-3">
+        <form method="GET" action="{% url 'search' %}" class="navbar-form" role="search">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search" name="query">
+            <div class="input-group-btn">
+                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+            </div>
+        </div>
+        </form>
+      </div>
+
       <ul class="nav navbar-nav navbar-right">
 	{% if not auth %}
-        <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-user"></span> Login</a></li>
+            <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-user"></span> Login</a></li>
 	{% endif %}
 	{% if auth %}
-	<li><a href="#"><span class="fa fa-bitcoin fa-lg"></span> User.bitcoin_credit</a></li>
-	<li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-user"></span> Logout</a></li>
+	    <li><a href="#"><span class="fa fa-bitcoin fa-lg"></span>User.bitcoin_credit</a></li>
+	    <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-user"></span> Logout</a></li>
 	{% endif %}
         <li><a href="#"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
       </ul>

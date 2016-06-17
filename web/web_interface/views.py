@@ -13,18 +13,18 @@ from django.shortcuts import render_to_response
 
 
 def search(request):
+    auth = request.COOKIES.get('auth')
     if request.method == "GET":
         if 'query' in request.GET:
             query = request.GET['query']
-            resp = (search_exp_api(query))
+            resp = search_exp_api(query)['hits']['hits']
+            results = []
+            for r in resp:
+                results.append(r['_source'])
+            context = {'results': results, 'auth': auth}
+            return render(request, 'SRP.html', context)
 
-#            return render_to_response('search.html', {'result':resp})
-#            return (JsonResponse(json.dumps(resp), safe=False,content_type= 'application/json'))
-            return HttpResponse(resp)
-          
-
-    return HttpResponse('hi')
-
+    return HttpResponse('hi') # TODO: replace all of these with generic error page
 
 @sensitive_post_parameters('username', 'password')
 @csrf_protect
@@ -132,6 +132,10 @@ def listing(request, listing_id):
     resp = requests.get(url).json()
     return render(request, 'listing.html', resp)
 
+"""
+The remaining methods are API calls to the experience API layer
+We pull these out to make the code more readable above
+"""
 def recent_listings_exp_api():
     url = 'http://exp-api:8000/recent_listings'
     resp = requests.get(url).json()
@@ -163,11 +167,12 @@ def create_listing_exp_api(title, description, bitcoin_cost, quantity_available)
                 'bitcoin_cost': bitcoin_cost,
                 'quantity_available': quantity_available}
     
-    r = requests.post(url, data=postdata)
-    return r
+    resp = requests.post(url, data=postdata)
+    return resp
 
 def search_exp_api(query):
     url = 'http://exp-api:8000/search_results_service/'
     url += '?query=%s' % (query)
-    r = requests.get(url)
-    return r
+    resp = requests.get(url).json()
+    return resp
+

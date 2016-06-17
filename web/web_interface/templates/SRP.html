@@ -4,13 +4,13 @@
 
 <div class="jumbotron">
   <div class="container text-center">
-    <h1>CS 4501 Project</h1>    
-    <p>Brian, Reina, & Merlin</p>
+    <h1>Search Results</h1>    
   </div>
 </div>
 
 {% include 'header_bar.html' %}
 
+{% if results %}
 <div class="container">    
   <div class="row">
     {% for item in results %}
@@ -20,13 +20,14 @@
         <div class="panel-heading">{{ item.title }}</div>
         <div class="panel-body"><img src="http://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"></div>
         <div class="panel-footer">{{ item.description }}</div>
+	<div class="panel-footer">Availability: {{ item.quantity_available }}</div>
       </div>
     </div>
     </a>
     {% endfor %}
   </div>
-</div><br><br>
+</div>
+{% endif %}
 
 </body>
 </html>
-

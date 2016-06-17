@@ -2,7 +2,7 @@ import requests
 import urllib.request
 import urllib.parse
 import json
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from kafka import KafkaProducer
 from elasticsearch import Elasticsearch
@@ -12,9 +12,9 @@ def search_results_service(request):
         query = request.GET['query']
         es = Elasticsearch(['es'])
         results = es.search(index='listing_index', body={'query': {'query_string': {'query': query}}, 'size': 10})
-        return HttpResponse(results['hits']['hits'])
+        return JsonResponse(results)
     else:
-        return HttpResponse('missing query string')
+        return HttpResponse('missing query string') # FIXME
 
 @csrf_exempt
 def create_listing_service(request):
