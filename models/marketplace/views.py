@@ -32,7 +32,8 @@ class MerchantViewSet(viewsets.ModelViewSet):
     queryset = Merchant.objects.all()
     serializer_class = MerchantSerializer
 
-def create_listing(request):
+def add_to_cart(request):
+    # add item to cart that (TODO) already exists for each account when create_user is first called
     pass
 
 def create_user(request):

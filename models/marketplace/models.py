@@ -3,7 +3,6 @@ from django.utils import timezone
 import datetime
 
 
-
 class Listing (models.Model):
     title = models.TextField()
     description = models.TextField()
@@ -21,6 +20,15 @@ class Merchant(models.Model):
     is_seller = models.BooleanField(default=False)
     purchases = models.ForeignKey(Listing, blank=True, null=True)
 
+class ShoppingCart(models.Model):
+    account = models.ForeignKey(Merchant)
+    items = models.ManyToManyField(Listing, blank=True)
+
+    def cart_total(self):
+        total = 0
+        for item in self.items.all():
+            total += item.bitcoin_cost
+        return total
 
 class Authenticator (models.Model):
     userid = models.ForeignKey(Merchant)
