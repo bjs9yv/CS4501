@@ -13,8 +13,15 @@ def search_results_service(request):
         es = Elasticsearch(['es'])
         results = es.search(index='listing_index', body={'query': {'query_string': {'query': query}}, 'size': 10})
         return JsonResponse(results)
-    else:
-        return HttpResponse('missing query string') # FIXME
+
+def add_to_cart_service(request):
+    if 'id' in request.GET and 'auth' in request.GET:
+        id = request.GET['id']
+        auth = request.GET['auth']
+        url = 'http://models-api:8000/add_to_cart/?auth=%s&id=%s' % (auth, id)
+        r = requests.get(url)
+        # TODO: post to kafka
+        return JsonResponse(r)
 
 @csrf_exempt
 def create_listing_service(request):

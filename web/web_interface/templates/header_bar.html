@@ -59,10 +59,11 @@
             <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-user"></span> Login</a></li>
 	{% endif %}
 	{% if auth %}
-	    <li><a href="#"><span class="fa fa-bitcoin fa-lg"></span>User.bitcoin_credit</a></li>
+	    <li><a href="#"><span class="fa fa-bitcoin fa-lg"></span> User.bitcoin_credit</a></li>
 	    <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-user"></span> Logout</a></li>
 	{% endif %}
-        <li><a href="#"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
+        <li><a href="{% url 'cart' %}"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
+	
       </ul>
     </div>
   </div>

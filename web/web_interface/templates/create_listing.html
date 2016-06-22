@@ -1,6 +1,15 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="en">
+<body>
 
-<h2>Create New Listing</h2>
+<div class="jumbotron">
+  <div class="container text-center">
+    <h1>Create New Listing</h1>    
+  </div>
+</div>
+
+{% include 'header_bar.html' %}
+
 <form method="post" autocomplete="off" action="{% url 'create_listing' %}">
   {% csrf_token %}
   <fieldset>

@@ -1,7 +1,7 @@
 import requests
 from rest_framework import viewsets
 from .serializers import ListingSerializer, TransactionSerializer, MessageSerializer, MerchantSerializer
-from .models import Listing, Merchant, Message, Transaction, Authenticator
+from .models import Listing, Merchant, Message, Transaction, Authenticator, ShoppingCart
 import os
 import hmac
 import json
@@ -32,10 +32,37 @@ class MerchantViewSet(viewsets.ModelViewSet):
     queryset = Merchant.objects.all()
     serializer_class = MerchantSerializer
 
+# TODO: add to urls.py, test me
 def add_to_cart(request):
-    # add item to cart that (TODO) already exists for each account when create_user is first called
-    pass
+    if request.method != 'GET':
+        return HttpResponse(json.dumps({'added': False, 'response': 'Bad request. Use GET'}))
+    if 'id' in request.GET and 'auth' in request.GET:
+        id = request.GET['id']
+        if Listing.objects.filter(id=id):
+            listing = Listing.objects.get(id=id)
+            # Grab the user from the auth token
+            if Authenticator.objects.filter(authenticator=request.GET['auth']):
+                auth = Authenticator.objects.get(authenticator=request.GET['auth'])
+                user = auth.userid
+                cart = ShoppingCart.objects.get(account=user)
+                cart.items.add(listing)
+                return HttpResponse(json.dumps({'added': True, 'response': 'Listing added to cart'}))
+            else:
+                return HttpResponse(json.dumps({'added': False, 'response': 'Auth 404'}))
+        else:
+            return HttpResponse(json.dumps({'added': False, 'response': 'Listing 404'}))
+    else:
+            return HttpResponse(json.dumps({'added': False, 'response': 'Request missing id and/or auth'}))
 
+def remove_from_cart(request):
+    pass
+    # cart.items.all() # all the items in the cart
+    #cart.items.get(listing) # get just that item
+
+def get_cart(request):
+    pass
+    # return relevant cart information on items, total, etc
+        
 def create_user(request):
     if request.method != 'GET':
         return HttpResponse(json.dumps({'create': False, 'response': 'Bad request. Use GET'}))
@@ -45,10 +72,15 @@ def create_user(request):
         if Merchant.objects.filter(username=username):
             # check to see if username is already taken
             return HttpResponse(json.dumps({'create': False, 'response': 'Username taken'}))
+        # Create the user with given username and password
         new_user = Merchant.objects.create()
         new_user.username = username
+        # Store only salted hash of password with make_password()
         new_user.password = make_password(password)
         new_user.save()
+        # Give the user a ShoppingCart
+        cart = ShoppingCart(account=new_user)
+        cart.save()
         return HttpResponse(json.dumps({'create': True, 'response': 'New User created'}))
     else:
         return HttpResponse(json.dumps({'create': False, 'response': 'Missing Username and/or password'}))
@@ -77,7 +109,6 @@ def verify_user(request):
         return HttpResponse(json.dumps({'ok':True, 'response':{'authenticator': new_auth.authenticator}}))
     else:
         return HttpResponse(json.dumps({'ok':False, 'response': 'Incorrect username and/or password '}))
-
 
 def logout(request):
     if 'auth' in request.GET:

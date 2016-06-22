@@ -16,5 +16,6 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^logout/', views.logout, name='logout'),
     url(r'^create_user/', views.create_user, name ='create_user'),
-    url(r'^verify_user/', views.verify_user, name = 'verify_user')
+    url(r'^verify_user/', views.verify_user, name = 'verify_user'),
+    url(r'^add_to_cart/', views.add_to_cart, name = 'add_to_cart')
 ]

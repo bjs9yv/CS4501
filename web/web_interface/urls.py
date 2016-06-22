@@ -10,5 +10,6 @@ urlpatterns = [
     url(r'^login/', views.login, name='login'),
     url(r'^logout/', views.logout, name='logout'),
     url(r'^search/', views.search, name='search'),
+    url(r'^cart/', views.cart, name='cart'),
     url(r'^', views.home, name='home')
 ]

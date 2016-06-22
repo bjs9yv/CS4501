@@ -11,6 +11,21 @@ import json
 from .forms import RegistrationForm, LoginForm, CreateListingForm
 from django.shortcuts import render_to_response
 
+# TODO: add to cart button on listings
+# TODO: cart.html
+def cart(request):
+    auth = request.COOKIES.get('auth')
+    if not auth:
+        # Currently you must be logged in to use the shopping cart, TODO is guest  with cookies
+        return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing"))
+    if request.method == "GET":
+        context = {'auth': auth}
+        if 'listing_id' in request.GET:
+            pass # TODO: add_to_cart, put status message in context
+        # TODO: fire off get_cart_info(auth=auth)
+        context['message'] = 'Your cart is empty'
+        return render(request, 'cart.html', context)
+    return HttpResponseRedirect('home')
 
 def search(request):
     auth = request.COOKIES.get('auth')
@@ -23,8 +38,7 @@ def search(request):
                 results.append(r['_source'])
             context = {'results': results, 'auth': auth}
             return render(request, 'SRP.html', context)
-
-    return HttpResponse('hi') # TODO: replace all of these with generic error page
+    return HttpResponseRedirect('home')
 
 @sensitive_post_parameters('username', 'password')
 @csrf_protect
@@ -104,7 +118,7 @@ def create_listing(request):
         return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing"))
     if request.method == 'GET':
         form = CreateListingForm()
-        context = {'form': form}
+        context = {'form': form, 'auth': auth}
         return render (request, 'create_listing.html', context )
     elif request.method == 'POST':
         form = CreateListingForm(data=request.POST)
@@ -116,14 +130,14 @@ def create_listing(request):
             resp = create_listing_exp_api(title, description, bitcoin_cost, quantity_available)
             if not resp or not '201':
                 errors = 'Sorry please refresh and try again' 
-                context = {'form': form, 'errors': errors}
+                context = {'form': form, 'errors': errors, 'auth': auth}
                 return render(request, 'create_listing.html', context)
             else:
                 # redirect to success page
                 return TemplateResponse(request, 'listing_success.html', {})
         else:
             form = CreateListing()
-            context = {'form': form}
+            context = {'form': form, 'auth': auth}
             return render (request, 'create_listing.html', context)
                 
 def listing(request, listing_id):
