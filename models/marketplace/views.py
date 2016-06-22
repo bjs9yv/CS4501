@@ -8,7 +8,7 @@ import json
 import datetime
 from django.contrib.auth.hashers import check_password, make_password
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 class ListingViewSet(viewsets.ModelViewSet):
     """

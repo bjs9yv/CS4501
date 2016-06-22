@@ -19,9 +19,11 @@ def add_to_cart_service(request):
         id = request.GET['id']
         auth = request.GET['auth']
         url = 'http://models-api:8000/add_to_cart/?auth=%s&id=%s' % (auth, id)
-        r = requests.get(url)
+        resp = requests.get(url)
         # TODO: post to kafka
-        return JsonResponse(r)
+        return HttpResponse(resp)
+    else:
+        return HttpResponse(json.dumps({'added': 'false'}))
 
 @csrf_exempt
 def create_listing_service(request):

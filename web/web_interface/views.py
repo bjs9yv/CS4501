@@ -20,10 +20,10 @@ def cart(request):
         return HttpResponseRedirect(reverse("login") + "?next=" + reverse("create_listing"))
     if request.method == "GET":
         context = {'auth': auth}
-        if 'listing_id' in request.GET:
-            pass # TODO: add_to_cart, put status message in context
-        # TODO: fire off get_cart_info(auth=auth)
-        context['message'] = 'Your cart is empty'
+        if 'id' in request.GET:
+            resp = add_to_cart_api(request.GET['id'], auth)
+            context['added'] = resp['response']
+        # TODO: fire off get_cart_info(auth)
         return render(request, 'cart.html', context)
     return HttpResponseRedirect('home')
 
@@ -180,7 +180,6 @@ def create_listing_exp_api(title, description, bitcoin_cost, quantity_available)
                 'description': description,
                 'bitcoin_cost': bitcoin_cost,
                 'quantity_available': quantity_available}
-    
     resp = requests.post(url, data=postdata)
     return resp
 
@@ -190,3 +189,8 @@ def search_exp_api(query):
     resp = requests.get(url).json()
     return resp
 
+def add_to_cart_api(listing_id, auth):
+    url = 'http://exp-api:8000/add_to_cart_service/'
+    url += '?id=%s&auth=%s' % (listing_id, auth)
+    resp = requests.get(url).json()
+    return resp
