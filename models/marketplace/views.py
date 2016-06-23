@@ -32,7 +32,6 @@ class MerchantViewSet(viewsets.ModelViewSet):
     queryset = Merchant.objects.all()
     serializer_class = MerchantSerializer
 
-# TODO: add to urls.py, test me
 def add_to_cart(request):
     if request.method != 'GET':
         return HttpResponse(json.dumps({'added': False, 'response': 'Bad request. Use GET'}))

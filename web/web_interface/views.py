@@ -21,9 +21,10 @@ def cart(request):
     if request.method == "GET":
         context = {'auth': auth}
         if 'id' in request.GET:
-            resp = add_to_cart_api(request.GET['id'], auth)
-            context['added'] = resp['response']
+            resp = add_to_cart_api(request.GET['id'], auth) # Does auth need to be passed securely?
+            context['response'] = resp['response']
         # TODO: fire off get_cart_info(auth)
+        # TODO: add to cart button on listings
         return render(request, 'cart.html', context)
     return HttpResponseRedirect('home')
 

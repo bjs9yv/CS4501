@@ -23,7 +23,27 @@ def add_to_cart_service(request):
         # TODO: post to kafka
         return HttpResponse(resp)
     else:
-        return HttpResponse(json.dumps({'added': 'false'}))
+        return HttpResponse(json.dumps({'added': False}))
+
+def remove_from_cart_service(request):
+    if 'id' in request.GET and 'auth' in request.GET:
+        id = request.GET['id']
+        auth = request.GET['auth']
+        url = 'http://models-api:8000/remove_from_cart/?auth=%s&id=%s' % (auth, id)
+        resp = requests.get(url)
+        # TODO: post to kafka?
+        return HttpResponse(resp)
+    else:
+        return HttpResponse(json.dumps({'removed': False}))
+
+def get_cart_service(request):
+    if 'auth' in request.GET:
+        auth = request.GET['auth']
+        url = 'http://models-api:8000/get_cart/?auth=%s' % (auth)
+        resp = requests.get(url)
+        return HttpResponse(resp)
+    else:
+        return HttpResponse(json.dumps({'response': False}))
 
 @csrf_exempt
 def create_listing_service(request):
