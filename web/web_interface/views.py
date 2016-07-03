@@ -21,7 +21,7 @@ def cart(request):
     if request.method == "GET":
         context = {'auth': auth}
         if 'id' in request.GET:
-            resp = add_to_cart_api(request.GET['id'], auth) # Does auth need to be passed securely?
+            resp = add_to_cart_api(request.GET['id'], auth) # TODO: this mean auth needs to be remade each time
             context['response'] = resp['response']
         # TODO: fire off get_cart_info(auth)
         # TODO: add to cart button on listings

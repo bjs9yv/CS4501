@@ -53,15 +53,26 @@ def add_to_cart(request):
     else:
             return HttpResponse(json.dumps({'added': False, 'response': 'Request missing id and/or auth'}))
 
+def get_cart(request):
+    if request.method != 'GET':
+        return HttpResponse(json.dumps({'response': 'Bad request. Use GET'}))
+    if 'auth' in request.GET:
+        if Authenticator.objects.filter(authenticator=request.GET['auth']):
+            auth = Authenticator.objects.get(authenticator=request.GET['auth'])
+            user = auth.userid
+            cart = ShoppingCart.objects.get(account=user)
+            # return relevant cart information on items, total, etc
+            return HttpResponse(json.dumps({}))
+        else:
+            return HttpResponse(json.dumps({'response': 'Auth 404'}))
+     else:
+         return HttpResponse(json.dumps({'response': 'Request missing id and/or auth'}))
+    
 def remove_from_cart(request):
     pass
     # cart.items.all() # all the items in the cart
     #cart.items.get(listing) # get just that item
 
-def get_cart(request):
-    pass
-    # return relevant cart information on items, total, etc
-        
 def create_user(request):
     if request.method != 'GET':
         return HttpResponse(json.dumps({'create': False, 'response': 'Bad request. Use GET'}))

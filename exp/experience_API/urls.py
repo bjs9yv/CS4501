@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^logout/', views.logout, name='logout'),
     url(r'^add_to_cart_service/', views.add_to_cart_service, name='add_to_cart_service'),
     url(r'^search_results_service/', views.search_results_service, name='search_results_service'),
+    url(r'^get_cart_service/', views.get_cart_service, name='get_cart_service'),
     url(r'^create_user/', views.create_user, name='create_user'),
     url(r'^admin/', include(admin.site.urls)),
 ]
