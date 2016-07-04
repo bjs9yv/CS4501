@@ -10,6 +10,27 @@
 
 {% include 'header_bar.html' %}
 
+
 <br>
 {{ response }}
 
+{% if items %}
+<div class="container">    
+  <div class="row">
+    {% for item in items %}
+    <a href="{% url 'listing' item.id %}">
+    <div class="col-sm-4">
+      <div class="panel panel-primary">
+        <div class="panel-heading">{{ item.title }}</div>
+        <div class="panel-body"><img src="http://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"></div>
+        <div class="panel-footer">{{ item.description }}</div>
+      </div>
+    </div>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+<br>
+<b>Total Cost: </b>{{ total }}

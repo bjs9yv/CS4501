@@ -23,10 +23,22 @@ def cart(request):
         if 'id' in request.GET:
             resp = add_to_cart_api(request.GET['id'], auth) # TODO: this mean auth needs to be remade each time
             context['response'] = resp['response']
-        # TODO: fire off get_cart_info(auth)
+        
+        # show the user their cart's items
+        cart = get_cart_service(auth)
+        context['items'] = cart['items']
+        context['total'] = cart['total']
+
+
         # TODO: add to cart button on listings
         return render(request, 'cart.html', context)
     return HttpResponseRedirect('home')
+
+"""
+>>> d
+'[{"pk": 1, "fields": {"title": "MAGA Hat", "bitcoin_cost": 2016.0, "quantity_available": 9001.0, "description": "Signed by Trump"}, "model": "marketplace.listing"}]'
+"""
+
 
 def search(request):
     auth = request.COOKIES.get('auth')
@@ -193,5 +205,11 @@ def search_exp_api(query):
 def add_to_cart_api(listing_id, auth):
     url = 'http://exp-api:8000/add_to_cart_service/'
     url += '?id=%s&auth=%s' % (listing_id, auth)
+    resp = requests.get(url).json()
+    return resp
+
+def get_cart_service(auth):
+    url = 'http://exp-api:8000/get_cart_service/'
+    url += '?auth=%s' % (auth)
     resp = requests.get(url).json()
     return resp

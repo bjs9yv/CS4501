@@ -62,10 +62,14 @@ def get_cart(request):
             user = auth.userid
             cart = ShoppingCart.objects.get(account=user)
             # return relevant cart information on items, total, etc
-            return HttpResponse(json.dumps({}))
+            items = []
+            for i in cart.items.all():
+                items.append({'title': i.title, 'description': i.description, 'bitcoin_cost': i.bitcoin_cost, 'id': i.pk})
+            total = ShoppingCart.cart_total(cart)
+            return HttpResponse(json.dumps({'items': items, 'total': total}))
         else:
             return HttpResponse(json.dumps({'response': 'Auth 404'}))
-     else:
+    else:
          return HttpResponse(json.dumps({'response': 'Request missing id and/or auth'}))
     
 def remove_from_cart(request):

@@ -1,5 +1,7 @@
 models:
    build: .
+   environment:
+     - PYTHONUNBUFFERED=0
    external_links:
      - mysql:db
    volumes:
@@ -10,6 +12,8 @@ models:
 
 exp:
    build: .
+   environment:
+     - PYTHONUNBUFFERED=0
    links:
      - models:models-api
      - kafka:kafka
@@ -22,6 +26,8 @@ exp:
 
 web:
    build: .
+   environment:
+     - PYTHONUNBUFFERED=0
    links:
      - exp:exp-api
    volumes:
